@@ -1,0 +1,28 @@
+{% extends "projectcalendar/base.html" %}
+
+{% load staticfiles %}
+
+{% block big-heading %}
+	Join Social Network Website!
+{% endblock %}
+
+{% block headcontent %}
+<link href="{% static 'projectcalendar/register.css' %}" rel="stylesheet" type="text/css">
+{% endblock %}
+{% block content %}
+	<form method="post" action="{% url 'register' %}" class="form-signin">
+		<h2 class="form-signin-heading">Please Register</h2>
+		<label for="inputEmail" class="sr-only">First Name</label>
+		<input type="text" id="inputUsername" class="form-control" placeholder="First Name" name = "first_name" required autofocus>
+		<label for="inputEmail" class="sr-only">Last Name</label>
+		<input type="text" id="inputUsername" class="form-control" placeholder="Last Name" name = "last_name" required autofocus>
+		<label for="inputEmail" class="sr-only">Username</label>
+		<input type="text" id="inputUsername" class="form-control" placeholder="Username" name = "username" required autofocus>
+		<label for="inputPassword" class="sr-only">Password</label>
+		<input type="password" id="inputPassword" class="form-control" placeholder="Password" name = "password1" required>
+		<label for="inputPassword" class="sr-only">Password</label>
+		<input type="password" id="inputPassword" class="form-control" placeholder="Password" name = "password2" required>
+		{% csrf_token %}
+		<button class="btn btn-lg btn-primary btn-block" type="submit">Register </button>
+	</form>
+{% endblock %}
