@@ -70,7 +70,7 @@ def register(request):
 	# Just display the registration form if this is a GET request.
 	if request.method == 'GET':
 		context['form'] = RegistrationForm()
-		return render(request, 'projectcalendar/register.html', context)
+		return render(request, 'projectCalendar/register.html', context)
 
 	# Creates a bound form from the request POST parameters and makes the 
 	# form available in the request context dictionary.
@@ -79,7 +79,7 @@ def register(request):
 
 	# Validates the form.
 	if not form.is_valid():
-		return render(request, 'projectcalendar/register.html', context)
+		return render(request, 'projectCalendar/register.html', context)
 
 	# At this point, the form data is valid.  Register and login the user.
 	new_user = User.objects.create_user(username=form.cleaned_data['username'], 
@@ -92,4 +92,4 @@ def register(request):
 	new_user = authenticate(username=form.cleaned_data['username'],
 							password=form.cleaned_data['password1'])
 	login(request, new_user)
-	return redirect(reverse('/'))
+	return redirect(reverse('home'))

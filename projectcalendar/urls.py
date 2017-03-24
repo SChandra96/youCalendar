@@ -3,7 +3,7 @@ from django.contrib.auth import views as auth_views
 from projectcalendar import views2 as projectcalendar_views
 
 urlpatterns = [
-    url(r'^$', projectcalendar_views.home, name='home'),
+    # url(r'^$', ),
     # url(r'^global_stream$', projectcalendar_views.global_stream, name='global_stream'),
     # url(r'^create$', projectcalendar_views.create, name='create'),
     # url(r'^profile$', projectcalendar_views.profile, name='profile'),

@@ -54,10 +54,10 @@ ROOT_URLCONF = 'webapps.urls'
 
 # Used by the authentication system for the private-todo-list application.
 # URL to use if the authentication system requires a user to log in.
-LOGIN_URL = '/projectcalendar/login'
+LOGIN_URL = '/login'
 
 # Default URL to redirect to after a user logs in.
-LOGIN_REDIRECT_URL = '/projectcalendar/'
+LOGIN_REDIRECT_URL = '/'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
