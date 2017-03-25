@@ -13,25 +13,26 @@ import json
 # Create your views here.
 @login_required
 def home(request):
-    context = {}
-    context['form'] = CreateEventForm()
-    return render(request, 'projectCalendar/index2.html', context)
+	context = {}
+	context['form'] = CreateEventForm()
+	return render(request, 'projectCalendar/index2.html', context)
 
 @login_required
-def displayEventForm(request):
+def addEvent(request):
 	context = {}
 	context['form'] = CreateEventForm()
 	if request.method == 'GET':
 		return render(request, 'projectCalendar/index2.html', context)
 	form = CreateEventForm(request.POST)
 	if not form.is_valid():
-	    return render(request, 'projectCalendar/index2.html', context)
-	start = form.cleaned_data['datepicker']+'T'+request.POST['startTime']+":00"
-	print start
+		return render(request, 'projectCalendar/index2.html', context)
+	startDate = form.cleaned_data['datepicker']
+	startTime = request.POST['startTime']+":00"
 	new_event = Event(title=form.cleaned_data['title'],
-					  start=start)
+					  startDate=startDate,
+					  startTime=startTime)
 	new_event.save()
-	print'new event'
+	UserWithFields.objects.get(user=request.user).events.add(new_event)
 	context['message'] = 'Your event has been saved to our calendar'
 	return redirect('/')
 
@@ -42,25 +43,28 @@ def editEvent(request, id):
 	context['form'] = EditEventForm()
 	if request.method == 'GET':
 		print 'hello'
-		return render(request, 'projectCalendar/addEvent.html', context)
+		return render(request, 'projectCalendar/editEvent.html', context)
 	form = EditEventForm(request.POST)
 	if not form.is_valid():
-	    return render(request, 'projectCalendar/addEvent.html', context)
+		return render(request, 'projectCalendar/editEvent.html', context)
 	event = get_object_or_404(Event, id=int(id))
-	print event
-	start = form.cleaned_data['datepicker']
+	startDate = form.cleaned_data['datepicker']
 	title = form.cleaned_data['title']
-	if (start != ''): event.start = start
+	startTime = request.POST['startTime']
+	if (startDate != ''): event.startDate = startDate
 	if (title != ''): event.title = title
+	if (startTime != ''): event.startTime = startTime + ":00"
 	event.save()
 	context['message'] = 'Changes made to this event have been saved to our calendar'
-	return render(request, 'projectCalendar/addEvent.html', context)
+	return render(request, 'projectCalendar/editEvent.html', context)
+
 
 def get_list_json(request):
-	print 'hello'
 	events = []
-	for event in Event.objects.all():
-		events.append({'title' : event.title, 'start': event.start})
+	for event in UserWithFields.objects.get(user=request.user).events.all():
+		start = event.startDate + 'T' + event.startTime 
+		print event.id
+		events.append({'title' : event.title, 'start': start, 'id': event.id})
 	return HttpResponse(json.dumps(events), content_type='application/json')
 
 @transaction.atomic
@@ -91,5 +95,7 @@ def register(request):
 	# Logs in the new user and redirects to his/her todo list
 	new_user = authenticate(username=form.cleaned_data['username'],
 							password=form.cleaned_data['password1'])
+	new_user_with_fields = UserWithFields(user=new_user)
+	new_user_with_fields.save()
 	login(request, new_user)
 	return redirect(reverse('home'))

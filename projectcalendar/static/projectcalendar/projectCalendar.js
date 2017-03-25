@@ -13,7 +13,7 @@ if (window.location.pathname === '/') {
 	    	},
 	    	eventClick: function(event, element) {
 	    		console.log(event);
-	    		var elemId = event["_id"].slice(-1);
+	    		var elemId = event["id"];
 	    		window.location.href = "/edit_event/" + elemId;
 
 		        //$('#calendar').fullCalendar('updateEvent', event);

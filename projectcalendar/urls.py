@@ -8,7 +8,7 @@ urlpatterns = [
     # url(r'^create$', projectcalendar_views.create, name='create'),
     # url(r'^profile$', projectcalendar_views.profile, name='profile'),
     # url(r'^edit/(\d+)$', projectcalendar_views.edit, name='edit'),
-    url(r'^add_event$', projectcalendar_views.displayEventForm, name='add_event'),
+    url(r'^add_event$', projectcalendar_views.addEvent, name='add_event'),
     url(r'^edit_event/(\d+)$', projectcalendar_views.editEvent, name='edit_event'),
     url(r'^get-list-json$', projectcalendar_views.get_list_json),
     url(r'^register$', projectcalendar_views.register, name='register'),

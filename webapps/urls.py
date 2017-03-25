@@ -12,7 +12,7 @@ from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     url(r'^$', views.home, name = 'home'),
-    url(r'^add_event$', views.displayEventForm, name='add_event'),
+    url(r'^add_event$', views.addEvent, name='add_event'),
     url(r'^edit_event/(\d+)$', views.editEvent, name='edit_event'),
     url(r'^get-list-json$', views.get_list_json),
     url(r'^register$', views.register, name='register'),
