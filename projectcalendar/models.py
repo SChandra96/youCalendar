@@ -7,7 +7,9 @@ class Event(models.Model):
 	title = models.CharField(max_length=20)
 	startDate = models.CharField(max_length=10)
 	startTime = models.CharField(max_length=20)
+	endTime = models.CharField(max_length=10)
 
 class UserWithFields(models.Model):
 	user = models.OneToOneField(User, related_name='user')
 	events = models.ManyToManyField(Event)
+

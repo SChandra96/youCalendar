@@ -16,17 +16,25 @@
 		{% endif %}
         <form method="post">
             <table>
-                <tr>
-                  <td>{{ form.title.label_tag }}</td>
-                  <td>{{ form.title }}</td>
-                </tr>
+              <tr>
+                <td>{{ form.title.label_tag }}</td>
+                <td>{{ form.title }}</td>
+              </tr>
               <tr>
                 <td> Start Time: </td>
                 <td><input name="startTime" type="time"></td>
               </tr>
               <tr>
+                <td> End Time: </td>
+                <td><input name="endTime" type="time"></td>
+              </tr>
+              <tr>
                 <td>{{ form.datepicker.label_tag }}</td>
                 <td>{{ form.datepicker }}</td>
+              </tr>
+              <tr>
+                <td> Invitee's email ID: </td>
+                <td>{{ form.email }}</td>
               </tr>
             </table>
         	{% csrf_token %}

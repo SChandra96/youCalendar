@@ -20,4 +20,6 @@ urlpatterns = [
     url(r'^login$', auth_views.login, {'template_name':'projectcalendar/login.html'}, name='login'),
     # # Route to logout a user and send them back to the login page
     url(r'^logout$', auth_views.logout_then_login, name='logout'),
+    url(r'^confirm-registration/(?P<eventTitle>[a-zA-Z0-9_@\+\-]+)/(?P<userEmail>[\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4})/(?P<token>[a-z0-9\-]+)$',
+        views.inviteUserAccept, name='confirm'),
 ]
