@@ -9,6 +9,7 @@ from django.contrib.auth import login, authenticate
 from django.contrib.auth.models import User
 from django.db import transaction
 import json
+from django.http import Http404
 from django.contrib.auth.tokens import default_token_generator
 
 # Used to send mail from within Django
