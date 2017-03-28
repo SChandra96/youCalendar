@@ -8,6 +8,7 @@
       	<script src = "https://code.jquery.com/jquery-1.10.2.js"></script>
       	<script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
       	<script src="{% static 'projectcalendar/projectCalendar.js' %}" type="text/javascript"></script>
+        <script src="{% static 'projectcalendar/editEvent.js' %}" type="text/javascript"></script>
 	</head>
 	<body>
 		<div>
@@ -27,6 +28,13 @@
               <tr>
                 <td> End Time: </td>
                 <td><input name="endTime" type="time"></td>
+              </tr>
+              <tr>
+              <td> Repeat: </td>
+              <td> 
+                <input id = "repeat" type="checkbox" name="repeat" value="repeat"
+                onchange = 'popRepeatPage(this)'><br>
+              </td>
               </tr>
               <tr>
                 <td>{{ form.datepicker.label_tag }}</td>
