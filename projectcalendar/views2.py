@@ -123,6 +123,7 @@ def register(request):
 	# Validates the form.
 	if not form.is_valid():
 		print 'commin'
+		context['message'] = 'Information input is invalid, please make sure that your username and email is unique.'
 		return render(request, 'projectCalendar/register.html', context)
 
 	# At this point, the form data is valid.  Register and login the user.
