@@ -31,5 +31,21 @@ else {
         var selected = $(this).val();
         console.log(selected);
     	});
+
+    	$( "#id_datepicker_st" ).datepicker({
+			dateFormat:"yy-mm-dd",
+		});
+		$("#id_datepicker_st").on("change",function(){
+        var selected = $(this).val();
+        console.log(selected);
+    	});
+
+    	$( "#id_datepicker_end" ).datepicker({
+			dateFormat:"yy-mm-dd",
+		});
+		$("#id_datepicker_end").on("change",function(){
+        var selected = $(this).val();
+        console.log(selected);
+    	});
 	});
 }

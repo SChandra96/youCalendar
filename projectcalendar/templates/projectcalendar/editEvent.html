@@ -68,7 +68,7 @@
               <form method="post" id = "repeat-form">
                 <table>
                   <tr>
-                    <td>repeat date: </td>
+                    <td>Repeat Date: </td>
                     <td>
                         <input type="checkbox" id="repeat-date-7" class= "rp-date" /> Sun
                         <input type="checkbox" id="repeat-date-1" class= "rp-date" /> Mon
@@ -78,6 +78,14 @@
                         <input type="checkbox" id="repeat-date-5" class= "rp-date"/> Fri
                         <input type="checkbox" id="repeat-date-6" class= "rp-date"/> Sat
                     </td>
+                  </tr>
+                  <tr>
+                    <td> Start Date: </td>
+                       <td>{{ form.datepicker_st }}</td>
+                  </tr>
+                  <tr>
+                    <td> End Date: </td>
+                    <td>{{ form.datepicker_end }}</td>
                   </tr>
                 </table>
               </form>
