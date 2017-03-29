@@ -69,8 +69,8 @@
                 <table>
                   <tr>
                     <td>Repeat Date: </td>
-                    <td>
-                        <input type="checkbox" id="repeat-date-7" class= "rp-date" /> Sun
+                    <td id = "date-checkbox-td">
+                        <input type="checkbox" id="repeat-date-7" class= "rp-date"/> Sun
                         <input type="checkbox" id="repeat-date-1" class= "rp-date" /> Mon
                         <input type="checkbox" id="repeat-date-2" class= "rp-date"/> Tue
                         <input type="checkbox" id="repeat-date-3" class= "rp-date"/> Wed
@@ -88,6 +88,8 @@
                     <td>{{ form.datepicker_end }}</td>
                   </tr>
                 </table>
+                {% csrf_token %}
+                <button> Submit </button>
               </form>
             <div>
           </div>

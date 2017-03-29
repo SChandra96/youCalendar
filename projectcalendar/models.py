@@ -8,6 +8,9 @@ class Event(models.Model):
 	startDate = models.CharField(max_length=10)
 	startTime = models.CharField(max_length=20)
 	endTime = models.CharField(max_length=10)
+	DateList = models.TextField(null=True)
+	rangeStartDate = models.CharField(max_length=10, null = True)
+	rangeEndDate = models.CharField(max_length=10, null = True)
 
 class UserWithFields(models.Model):
 	user = models.OneToOneField(User, related_name='user')

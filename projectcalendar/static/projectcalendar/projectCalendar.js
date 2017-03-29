@@ -20,6 +20,16 @@ if (window.location.pathname === '/') {
 
    			} 
 	    });
+
+	    $.getJSON('get-timezone-list', function(timezones) {
+			$.each(timezones, function(i, timezone) {
+				if (timezone != 'UTC') { // UTC is already in the list
+					$('#timezone').append(
+						$("<option/>").text(timezone).attr('value', timezone)
+					);
+				}
+			});
+		});
 	});
 }
 else {

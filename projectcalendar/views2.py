@@ -14,6 +14,7 @@ from django.contrib.auth.tokens import default_token_generator
 
 # Used to send mail from within Django
 from django.core.mail import send_mail
+import pytz
 
 # Create your views here.
 @login_required
@@ -33,7 +34,6 @@ def addEvent(request):
 		return render(request, 'projectCalendar/index2.html', context)
 	startDate = form.cleaned_data['datepicker']
 	startTime = request.POST['startTime']+":00"
-	
 	new_event = Event(title=form.cleaned_data['title'],
 					  startDate=startDate,
 					  startTime=startTime)
@@ -105,6 +105,11 @@ def get_list_json(request):
 		end = event.startDate + 'T' + event.endTime
 		events.append({'title' : event.title, 'start': start, 'end': end,'id': event.id})
 	return HttpResponse(json.dumps(events), content_type='application/json')
+
+def get_timezone_list():
+	timezones = pytz.all_timezones
+	
+	return timezones
 
 @transaction.atomic
 def register(request):
