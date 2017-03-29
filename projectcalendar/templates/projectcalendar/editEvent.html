@@ -60,10 +60,27 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">Modal Header</h4>
+            <h4 class="modal-title">Repeat Event</h4>
           </div>
           <div class="modal-body">
-            <p>Some text in the modal.</p>
+            <div>
+              <form method="post" id = "repeat-form">
+                <table>
+                  <tr>
+                    <td>repeat date: </td>
+                    <td>
+                        <input type="checkbox" id="repeat-date-7" class= "rp-date" /> Sun
+                        <input type="checkbox" id="repeat-date-1" class= "rp-date" /> Mon
+                        <input type="checkbox" id="repeat-date-2" class= "rp-date"/> Tue
+                        <input type="checkbox" id="repeat-date-3" class= "rp-date"/> Wed
+                        <input type="checkbox" id="repeat-date-4" class= "rp-date"/> Thur
+                        <input type="checkbox" id="repeat-date-5" class= "rp-date"/> Fri
+                        <input type="checkbox" id="repeat-date-6" class= "rp-date"/> Sat
+                    </td>
+                  </tr>
+                </table>
+              </form>
+            <div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal" onclick = 'unCheckRepeat()'>Close</button>
