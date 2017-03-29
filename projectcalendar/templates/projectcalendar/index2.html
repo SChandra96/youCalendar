@@ -27,12 +27,20 @@
 			<div class="container">
 				<nav class="blog-nav">
 		</nav>
-	</div>  
+			</div>  
 		</div>
+
 		<div class="user-info">
 			<form action="{% url 'logout' %}" method="get" id = "logout_form">
 				<button id = "logout-button"class="btn btn-lg btn-primary btn-block" type="submit">Logout</button>
 			</form>
+		</div>
+		<div class="timezone-div" id = "timezone-div">
+			<select id="timezone">
+			  <option value="1">test1</option>
+			  <option value="2" selected="selected">test2</option>
+			  <option value="3">test3</option>
+			</select>
 		</div>
 		<div id='calendar'></div>
 		<a data-toggle="modal" data-target="#myModal"> Add Event</a>
