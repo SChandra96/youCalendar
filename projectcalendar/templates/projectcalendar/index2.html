@@ -27,12 +27,20 @@
 			<div class="container">
 				<nav class="blog-nav">
 		</nav>
-	</div>  
+			</div>  
 		</div>
+
 		<div class="user-info">
 			<form action="{% url 'logout' %}" method="get" id = "logout_form">
 				<button id = "logout-button"class="btn btn-lg btn-primary btn-block" type="submit">Logout</button>
 			</form>
+		</div>
+		<div class="timezone-div" id = "timezone-div">
+			<select id="timezone">
+				<option value='' selected>none</option>
+				<option value='local'>local</option>
+				<option value='UTC'>UTC</option>
+			</select>
 		</div>
 		<div id='calendar'></div>
 		<a data-toggle="modal" data-target="#myModal"> Add Event</a>
@@ -58,7 +66,7 @@
 			        	<td><input name="startTime" type="time" value="00:00"></td>
 			        </tr>
 			         <tr>
-			            <td>{{ form.datepicker.label_tag }}</td>
+			         	<td>{{ form.datepicker.label_tag }}</td>
 			            <td>{{ form.datepicker }}</td>
 			        </tr>
 	        	</table>

@@ -14,6 +14,7 @@ from django.contrib.auth.tokens import default_token_generator
 
 # Used to send mail from within Django
 from django.core.mail import send_mail
+import pytz
 
 # Create your views here.
 @login_required
@@ -33,7 +34,6 @@ def addEvent(request):
 		return render(request, 'projectCalendar/index2.html', context)
 	startDate = form.cleaned_data['datepicker']
 	startTime = request.POST['startTime']+":00"
-	
 	new_event = Event(title=form.cleaned_data['title'],
 					  startDate=startDate,
 					  startTime=startTime)
@@ -53,7 +53,49 @@ def editEvent(request, id):
 	form = EditEventForm(request.POST)
 	if not form.is_valid():
 		return render(request, 'projectCalendar/editEvent.html', context)
+
 	event = get_object_or_404(Event, id=int(id))
+
+	print request.POST
+	#if submitted form is repeat form:
+	if 'repeat-form-flag' in request.POST:
+		if(event.endTime == ""):
+			print "line 63"
+			context['error'] = 'Event must have an end time before set repeat!'
+			return render(request, 'projectCalendar/editEvent.html', context)
+
+		rangeStartDate =  request.POST['datepicker_st']
+		rangeEndDate = request.POST['datepicker_end']
+		repeatDate = []
+		for j in range(1,8):
+			ch_str = "repeat-date-"+str(j)
+			if ch_str in request.POST:
+				repeatDate.append(j%7)
+
+		print "rangeStartDate: " + rangeStartDate
+		print "rangeEndDate: " + rangeEndDate
+		print "repeatDate: " + str(repeatDate)
+
+		
+		if(rangeStartDate < rangeEndDate):
+			print "range date is valid!"
+		else:
+			context['error'] = 'EndDate must be later than StartDate!'
+			return render(request, 'projectCalendar/editEvent.html', context)
+
+		if(rangeStartDate != ''):
+			event.rangeStartDate = rangeStartDate
+		if(rangeEndDate != ''):
+			event.rangeEndDate = rangeEndDate
+		if(repeatDate != []):
+			event.DateList = json.dumps(repeatDate)
+
+		event.save()
+
+		context['message'] = 'Changes made to this event have been saved to our calendar'
+		return render(request, 'projectCalendar/editEvent.html', context)
+	
+
 	startDate = form.cleaned_data['datepicker']
 	title = form.cleaned_data['title']
 	startTime = request.POST['startTime']
@@ -79,7 +121,7 @@ def editEvent(request, id):
 				  	from_email="shikhaac@andrew.cmu.edu",
 			  		recipient_list=[email])
 		except:
-			context['message'] = 'No user with email ID you entered exists'
+			context['error'] = 'No user with email ID you entered exists'
 	
 	return render(request, 'projectCalendar/editEvent.html', context)
 
@@ -103,8 +145,34 @@ def get_list_json(request):
 	for event in UserWithFields.objects.get(user=request.user).events.all():
 		start = event.startDate + 'T' + event.startTime 
 		end = event.startDate + 'T' + event.endTime
-		events.append({'title' : event.title, 'start': start, 'end': end,'id': event.id})
+		#
+		#event.startDate + 'T' + 
+		# {'title' : event.title, 'start': start, 'end': end,'id': event.id}
+		jsonDec = json.decoder.JSONDecoder()
+		if not event.DateList == None:
+			DateList = jsonDec.decode(event.DateList)
+			start = event.startTime 
+			end = event.endTime
+			
+			# if(event.rangeStartDate == '') or (event.en)
+			event_obj = {'title' : event.title, 'dow': DateList, 'start': start, 'end': end,'id': event.id,\
+			'ranges':[{'r_start': event.rangeStartDate,\
+			'r_end': event.rangeEndDate },]}
+		else:
+			event_obj = {'title' : event.title, 'start': start, 'end': end,
+			'id': event.id,}
+		
+
+			
+			
+		events.append(event_obj)
+
 	return HttpResponse(json.dumps(events), content_type='application/json')
+
+def get_timezone_list():
+	timezones = pytz.all_timezones
+	
+	return timezones
 
 @transaction.atomic
 def register(request):
@@ -123,6 +191,7 @@ def register(request):
 	# Validates the form.
 	if not form.is_valid():
 		print 'commin'
+		context['message'] = 'Information input is invalid, please make sure that your username and email is unique.'
 		return render(request, 'projectCalendar/register.html', context)
 
 	# At this point, the form data is valid.  Register and login the user.

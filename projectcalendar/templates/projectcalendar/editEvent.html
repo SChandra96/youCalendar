@@ -8,12 +8,23 @@
       	<script src = "https://code.jquery.com/jquery-1.10.2.js"></script>
       	<script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
       	<script src="{% static 'projectcalendar/projectCalendar.js' %}" type="text/javascript"></script>
+        <script src="{% static 'projectcalendar/editEvent.js' %}" type="text/javascript"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <link href="{% static 'dist/css/bootstrap.min.css'%}" rel="stylesheet">
 	</head>
+        <link href= "{% static 'projectcalendar/editEvent.css' %}" rel='stylesheet'/>
 	<body>
 		<div>
 		{% if message %}
-			{{message}}
+      <div class="message">
+			 {{message}}
+      </div>
 		{% endif %}
+    {% if error %}
+      <div class="error">
+       {{error}}
+      </div>
+    {% endif %}
         <form method="post">
             <table>
               <tr>
@@ -29,6 +40,13 @@
                 <td><input name="endTime" type="time"></td>
               </tr>
               <tr>
+                <td> Repeat: </td>
+                <td>
+                 <input type="checkbox" id="repeat" data-toggle="modal" data-target="#myModal" 
+                 />
+                </td>
+              </tr>
+              <tr>
                 <td>{{ form.datepicker.label_tag }}</td>
                 <td>{{ form.datepicker }}</td>
               </tr>
@@ -41,5 +59,53 @@
         	<button> Submit </button>
         </form>
     </div>
+    <!-- Modal -->
+    <div id="myModal" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" onclick = 'unCheckRepeat()' >&times;</button>
+            <h4 class="modal-title">Repeat Event</h4>
+          </div>
+          <div class="modal-body">
+            <div>
+              <form method="post" id = "repeat-form">
+                <table>
+                  <tr>
+                    <td>Repeat Date: </td>
+                    <td id = "date-checkbox-td">
+                        <input type = "hidden" name = "repeat-form-flag" value = "1"/>
+                        <input type="checkbox" name ="repeat-date-7" id="repeat-date-7" class= "rp-date"/> Sun
+                        <input type="checkbox" name ="repeat-date-1" id="repeat-date-1" class= "rp-date" /> Mon
+                        <input type="checkbox" name ="repeat-date-2" id="repeat-date-2" class= "rp-date"/> Tue
+                        <input type="checkbox" name ="repeat-date-3" id="repeat-date-3" class= "rp-date"/> Wed
+                        <input type="checkbox" name ="repeat-date-4" id="repeat-date-4" class= "rp-date"/> Thur
+                        <input type="checkbox" name ="repeat-date-5" id="repeat-date-5" class= "rp-date"/> Fri
+                        <input type="checkbox" name ="repeat-date-6" id="repeat-date-6" class= "rp-date"/> Sat
+                    </td>
+                  </tr>
+                  <tr>
+                    <td> Start Date: </td>
+                       <td>{{ form.datepicker_st }}</td>
+                  </tr>
+                  <tr>
+                    <td> End Date: </td>
+                    <td>{{ form.datepicker_end }}</td>
+                  </tr>
+                </table>
+                {% csrf_token %}
+                <button> Submit </button>
+              </form>
+            <div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal" onclick = 'unCheckRepeat()'>Close</button>
+          </div>
+        </div>
+
+      </div>
+</div>
 	</body>
 </html>

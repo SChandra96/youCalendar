@@ -11,7 +11,11 @@ class EditEventForm(forms.Form):
 	title = forms.CharField(max_length=20, required=False)
 	datepicker  = forms.CharField(max_length=20, required=False)
 	email = forms.CharField(max_length=50, widget = forms.EmailInput(), required=False)
+	datepicker_st  = forms.CharField(max_length=20, required=False)
+	datepicker_end  = forms.CharField(max_length=20, required=False)
+
 	
+
 class RegistrationForm(forms.Form):
 	first_name = forms.CharField(max_length=20)
 	last_name  = forms.CharField(max_length=20)
