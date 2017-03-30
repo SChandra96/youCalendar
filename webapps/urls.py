@@ -15,7 +15,7 @@ urlpatterns = [
     url(r'^add_event$', views.addEvent, name='add_event'),
     url(r'^edit_event/(\d+)$', views.editEvent, name='edit_event'),
     url(r'^get-list-json$', views.get_list_json),
-    url(r'^get-list-json$', views.get_timezone_list),
+    # url(r'^get-timezone-json$', views.get_timezone_list),
     url(r'^register$', views.register, name='register'),
     # # Route for built-in authentication with our own custom login page
     url(r'^login$', auth_views.login, {'template_name':'projectcalendar/login.html'}, name='login'),

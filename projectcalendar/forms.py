@@ -14,6 +14,8 @@ class EditEventForm(forms.Form):
 	datepicker_st  = forms.CharField(max_length=20, required=False)
 	datepicker_end  = forms.CharField(max_length=20, required=False)
 
+	
+
 class RegistrationForm(forms.Form):
 	first_name = forms.CharField(max_length=20)
 	last_name  = forms.CharField(max_length=20)
