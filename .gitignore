@@ -4,7 +4,6 @@
 local_settings.py
 
 *.swp
-
 db.sqlite3
 
 # Secret config parameters
