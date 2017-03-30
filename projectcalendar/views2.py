@@ -61,7 +61,7 @@ def editEvent(request, id):
 	if 'repeat-form-flag' in request.POST:
 		if(event.endTime == ""):
 			print "line 63"
-			context['message'] = 'Event must have an end time before set repeat!'
+			context['error'] = 'Event must have an end time before set repeat!'
 			return render(request, 'projectCalendar/editEvent.html', context)
 
 		rangeStartDate =  request.POST['datepicker_st']
@@ -70,7 +70,7 @@ def editEvent(request, id):
 		for j in range(1,8):
 			ch_str = "repeat-date-"+str(j)
 			if ch_str in request.POST:
-				repeatDate.append(j)
+				repeatDate.append(j%7)
 
 		print "rangeStartDate: " + rangeStartDate
 		print "rangeEndDate: " + rangeEndDate
@@ -80,7 +80,7 @@ def editEvent(request, id):
 		if(rangeStartDate < rangeEndDate):
 			print "range date is valid!"
 		else:
-			context['message'] = 'EndDate must be later than StartDate!'
+			context['error'] = 'EndDate must be later than StartDate!'
 			return render(request, 'projectCalendar/editEvent.html', context)
 
 		if(rangeStartDate != ''):
@@ -121,7 +121,7 @@ def editEvent(request, id):
 				  	from_email="shikhaac@andrew.cmu.edu",
 			  		recipient_list=[email])
 		except:
-			context['message'] = 'No user with email ID you entered exists'
+			context['error'] = 'No user with email ID you entered exists'
 	
 	return render(request, 'projectCalendar/editEvent.html', context)
 

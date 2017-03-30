@@ -16,8 +16,15 @@
 	<body>
 		<div>
 		{% if message %}
-			{{message}}
+      <div class="message">
+			 {{message}}
+      </div>
 		{% endif %}
+    {% if error %}
+      <div class="error">
+       {{error}}
+      </div>
+    {% endif %}
         <form method="post">
             <table>
               <tr>
