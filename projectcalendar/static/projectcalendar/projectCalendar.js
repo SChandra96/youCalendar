@@ -15,17 +15,18 @@ if (window.location.pathname === '/') {
 				console.log(JSON.stringify(event));
 				
 				var elemId = event["id"];
-				// window.location.href = "/edit_event/" + elemId;
+				window.location.href = "/edit_event/" + elemId;
 
 				//$('#calendar').fullCalendar('updateEvent', event);
 			},
-			// eventRender: function(event){
-			// 	console.log(event);
-			// 	return (event.ranges.filter(function(range){ // test event against all the ranges
-			// 		return (event.start.isBefore(range.end) &&
-			// 				event.end.isAfter(range.start));
-			// 	}).length)>0; //if it isn't in one of the ranges, don't render it (by returning false)
-			// },
+			eventRender: function(event){
+				console.log(event);
+				if(event.hasOwnProperty('ranges')){
+					return (event.ranges.filter(function(range){ // test event against all the ranges
+						return (event.start.isBefore(range.r_end) &&
+								event.end.isAfter(range.r_start));
+					}).length)>0; //if it isn't in one of the ranges, don't render it (by returning false)
+			}},
 
 		});
 

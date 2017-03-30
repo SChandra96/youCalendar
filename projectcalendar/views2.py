@@ -59,6 +59,11 @@ def editEvent(request, id):
 	print request.POST
 	#if submitted form is repeat form:
 	if 'repeat-form-flag' in request.POST:
+		if(event.endTime == ""):
+			print "line 63"
+			context['message'] = 'Event must have an end time before set repeat!'
+			return render(request, 'projectCalendar/editEvent.html', context)
+
 		rangeStartDate =  request.POST['datepicker_st']
 		rangeEndDate = request.POST['datepicker_end']
 		repeatDate = []
@@ -71,6 +76,7 @@ def editEvent(request, id):
 		print "rangeEndDate: " + rangeEndDate
 		print "repeatDate: " + str(repeatDate)
 
+		
 		if(rangeStartDate < rangeEndDate):
 			print "range date is valid!"
 		else:
@@ -143,11 +149,12 @@ def get_list_json(request):
 		#event.startDate + 'T' + 
 		# {'title' : event.title, 'start': start, 'end': end,'id': event.id}
 		jsonDec = json.decoder.JSONDecoder()
-		print "event.DateList:" + str(event.DateList)
 		if not event.DateList == None:
 			DateList = jsonDec.decode(event.DateList)
 			start = event.startTime 
 			end = event.endTime
+			
+			# if(event.rangeStartDate == '') or (event.en)
 			event_obj = {'title' : event.title, 'dow': DateList, 'start': start, 'end': end,'id': event.id,\
 			'ranges':[{'r_start': event.rangeStartDate,\
 			'r_end': event.rangeEndDate },]}
