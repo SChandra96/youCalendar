@@ -32,18 +32,19 @@
 
 		<div class="user-info">
 			<form action="{% url 'logout' %}" method="get" id = "logout_form">
-				<button id = "logout-button"class="btn btn-lg btn-primary btn-block" type="submit">Logout</button>
+				<button id = "logout-button" class="btn btn-lg btn-primary btn-block" type="submit">Logout</button>
 			</form>
+			<a data-toggle="modal" data-target="#myModal"> Add Event</a>
 		</div>
-		<div class="timezone-div" id = "timezone-div">
+		
+		<!--<div class="timezone-div" id = "timezone-div">
 			<select id="timezone">
 				<option value='' selected>none</option>
 				<option value='local'>local</option>
 				<option value='UTC'>UTC</option>
 			</select>
-		</div>
+		</div> -->
 		<div id='calendar'></div>
-		<a data-toggle="modal" data-target="#myModal"> Add Event</a>
 		 <!-- Modal -->
 		<div class="modal fade" id="myModal" role="dialog">
 		<div class="modal-dialog">
@@ -52,7 +53,7 @@
 		  <div class="modal-content">
 		    <div class="modal-header">
 		      <button type="button" class="close" data-dismiss="modal">&times;</button>
-		      <h4 class="modal-title">Modal Header</h4>
+		      <h4 class="modal-title">Add event </h4>
 		    </div>
 		    <div class="modal-body" >
 		      <form style="width:500px; height:500px" method="post"  action="{% url 'add_event' %}">
@@ -64,6 +65,10 @@
 			        <tr>
 			        	<td style="font-weight: bold"> Start Time </td>
 			        	<td><input name="startTime" type="time" value="00:00"></td>
+			        </tr>
+			         <tr>
+			        	<td style="font-weight: bold">End time </td>
+			        	<td><input name="endTime" type="time" value="00:00"></td>
 			        </tr>
 			         <tr>
 			         	<td>{{ form.datepicker.label_tag }}</td>

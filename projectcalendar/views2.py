@@ -34,9 +34,11 @@ def addEvent(request):
 		return render(request, 'projectCalendar/index2.html', context)
 	startDate = form.cleaned_data['datepicker']
 	startTime = request.POST['startTime']+":00"
+	endTime = request.POST['endTime'] + ":00"
 	new_event = Event(title=form.cleaned_data['title'],
 					  startDate=startDate,
-					  startTime=startTime)
+					  startTime=startTime,
+					  endTime=endTime)
 	new_event.save()
 	context['message'] = 'Your event has been saved to our calendar'
 	UserWithFields.objects.get(user=request.user).events.add(new_event)
