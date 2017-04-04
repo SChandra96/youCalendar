@@ -13,8 +13,13 @@ class EditEventForm(forms.Form):
 	email = forms.CharField(max_length=50, widget = forms.EmailInput(), required=False)
 	datepicker_st  = forms.CharField(max_length=20, required=False)
 	datepicker_end  = forms.CharField(max_length=20, required=False)
-
-	
+	notifTime = forms.IntegerField(required=False)
+	def clean(self):
+		cleaned_data = super(EditEventForm, self).clean()
+		notifTime = cleaned_data.get('notifTime')
+		if notifTime and notifTime <= 0:
+			raise forms.ValidationError("You can not enter a negative number for notification preference")
+		return cleaned_data
 
 class RegistrationForm(forms.Form):
 	first_name = forms.CharField(max_length=20)

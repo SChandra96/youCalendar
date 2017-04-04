@@ -1,3 +1,62 @@
+function getList() {
+    $.ajax({
+        url: "/get-list-json",
+        dataType : "json",
+        success: notify
+    });
+
+}
+
+function notify(events) {
+	console.log(events);
+	console.log(events.length);
+	for (var i = 0; i < events.length; i++) {
+		var event = events[i];
+		var curDate = (new Date()).toISOString();
+		var curMoment = moment(new Date());
+		if (event.hasOwnProperty('notificationPref') && event.hasOwnProperty('whenToNotify')) {
+			if(event.hasOwnProperty('ranges')) {
+				var startDate = (event.ranges)[0].r_start + "T" + event.start+"-04:00";
+				var endDate = (event.ranges)[0].r_end + "T" + event.end+"-04:00";
+				var startMoment = moment(startDate); //moment corrosponding to range start date
+				var endMoment = moment(endDate); //moment corrosponding to range end date
+				
+				if (curMoment.isBefore(startMoment, 'day') || curMoment.isSame(startMoment, 'day') || curMoment.isSame(endMoment, 'day')  ||
+					curMoment.isAfter(startMoment, 'day') && curMoment.isBefore(endMoment, 'day')) {
+					var currdow = curMoment.day();
+					if ((event.dow).indexOf(currdow) !== -1) { //if today is one of the days on which event will happen
+						var todayEventStartMoment = moment(curMoment.format('YYYY-MM-DD') + 'T' + event.start+"-04:00");
+						//var timeDiff = moment.duration(todayEventStartMoment.diff(curDate)).minutes();
+						var timeDiff = todayEventStartMoment.diff(curDate, event.notificationPref);
+						console.log(event.title)
+						console.log(todayEventStartMoment);
+						console.log(timeDiff);
+						if (timeDiff >= 0 && timeDiff <= 60) { //time difference between today's start time of evtmt and current time
+							var time = todayEventStartMoment.format("hh:mm");
+							time = time + ((todayEventStartMoment.hour()) >= 12 ? ' PM' : ' AM');
+							var notificationMessage = "Reminder: You have an event coming up today: " + event.title + " at " + time;
+							$.notify(notificationMessage, 
+									{position:"right bottom", clickToHide: true, 
+									 style:"bootstrap", className:"success", autoHide:false});
+						}
+					}
+				}	
+			} else {
+				var startMoment = moment(event.start + "-04:00");
+				var timeDiff = startMoment.diff(curDate, event.notificationPref);
+				if (timeDiff >= 0 && timeDiff <= 60) { 
+					var time = startMoment.format("hh:mm");
+					time = time + ((startMoment.hour()) >= 12 ? ' PM' : ' AM');
+					var notificationMessage = "Reminder: You have an event coming up today: " + event.title + " at " + time;
+					$.notify(notificationMessage, 
+							{position:"right bottom", clickToHide: true, 
+							style:"bootstrap", className:"success", autoHide:false});
+				}
+			}
+		}
+	} 	
+}
+
 if (window.location.pathname === '/') { 
 	$(document).ready(function() {
 
@@ -17,10 +76,8 @@ if (window.location.pathname === '/') {
 				var elemId = event["id"];
 				window.location.href = "/edit_event/" + elemId;
 
-				//$('#calendar').fullCalendar('updateEvent', event);
 			},
 			eventRender: function(event){
-				console.log(event);
 				if(event.hasOwnProperty('ranges')){
 					return (event.ranges.filter(function(range){ // test event against all the ranges
 						return (event.start.isBefore(range.r_end) &&
@@ -29,6 +86,7 @@ if (window.location.pathname === '/') {
 			}},
 
 		});
+		getList();
 
 		// $.getJSON('get-timezone-list', function(timezones) {
 		// 	$.each(timezones, function(i, timezone) {
@@ -40,6 +98,7 @@ if (window.location.pathname === '/') {
 		// 	});
 		// });
 	});
+	window.setInterval(getList, 1800000); //set correctly
 }
 else {
 	$(document).ready(function() {

@@ -11,6 +11,8 @@ class Event(models.Model):
 	DateList = models.TextField(null=True)
 	rangeStartDate = models.CharField(max_length=10, null = True)
 	rangeEndDate = models.CharField(max_length=10, null = True)
+	whenToNotify = models.IntegerField(null = True)
+	notificationPref = models.CharField(max_length=20, null=True)
 
 class UserWithFields(models.Model):
 	user = models.OneToOneField(User, related_name='user')

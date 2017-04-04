@@ -54,6 +54,18 @@
                 <td> Invitee's email ID: </td>
                 <td>{{ form.email }}</td>
               </tr>
+              <tr>
+                <td> Notifications: </td>
+                <td> {{form.notifTime}} </td>
+                <td>
+                <input list="notificationTime" name="notifPref">
+                  <datalist id="notificationTime">
+                    <option value="hours">
+                    <option value="minutes">
+                  </datalist>
+                  </input> 
+                </td>
+              </tr>
             </table>
         	{% csrf_token %}
         	<button> Submit </button>

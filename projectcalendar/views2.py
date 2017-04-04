@@ -103,10 +103,16 @@ def editEvent(request, id):
 	startTime = request.POST['startTime']
 	endTime = request.POST['endTime']
 	email = form.cleaned_data['email']
+	whenToNotify = form.cleaned_data['notifTime']
+	print type(whenToNotify)
+	notificationPref = request.POST['notifPref']
 	if (startDate != ''): event.startDate = startDate
 	if (title != ''): event.title = title
 	if (startTime != ''): event.startTime = startTime + ":00"
 	if (endTime != ''): event.endTime = endTime + ":00"
+	if (whenToNotify and notificationPref != ''):
+		event.whenToNotify = whenToNotify
+		event.notificationPref = notificationPref
 	event.save()
 	context['message'] = 'Changes made to this event have been saved to our calendar'
 	if (email != ''):
@@ -155,18 +161,21 @@ def get_list_json(request):
 			DateList = jsonDec.decode(event.DateList)
 			start = event.startTime 
 			end = event.endTime
-			
+		
 			# if(event.rangeStartDate == '') or (event.en)
-			event_obj = {'title' : event.title, 'dow': DateList, 'start': start, 'end': end,'id': event.id,\
+			event_obj = {
+			'title' : event.title, 'dow': DateList, 'start': start, 'end': end,'id': event.id,\
 			'ranges':[{'r_start': event.rangeStartDate,\
-			'r_end': event.rangeEndDate },]}
+			'r_end': event.rangeEndDate },],
+			}
+			
 		else:
 			event_obj = {'title' : event.title, 'start': start, 'end': end,
 			'id': event.id,}
-		
-
-			
-			
+		if event.notificationPref and event.whenToNotify:
+			event_obj['whenToNotify'] = event.whenToNotify
+		 	event_obj['notificationPref'] = event.notificationPref
+		print event_obj			
 		events.append(event_obj)
 
 	return HttpResponse(json.dumps(events), content_type='application/json')
