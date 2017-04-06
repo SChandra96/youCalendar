@@ -16,11 +16,32 @@
 }
 td {
     font-weight: bold;
+    padding-top: 3px; 
+    padding-bottom:3px;
+    padding-left: 5px;
+}
+
+#td-loc{
+    width: 500px;
+
+}
+#location{
+    width: 350px;
+    margin-right: 10px;
 }
 #save-loc-btn{
     float: right;
     margin-right: 12px;
     margin-top: 10px;
+}
+#td-noti{
+    width: 200px;
+   /* margin-right: -100px;*/
+}
+
+#td-noti-time{
+    margin-left: -100px;*/
+    float: right;
 }
 
 #google-map-content{
@@ -35,7 +56,6 @@ td {
     width: 100%;
     height: 86%;
 }
-
 #map {
     height: 100%;
     width: 100%;

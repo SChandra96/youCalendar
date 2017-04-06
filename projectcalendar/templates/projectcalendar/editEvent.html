@@ -48,8 +48,8 @@
                 </td>
               </tr>
               <tr>
-                <td> Location: </td>
-                <td>
+                <td > Location: </td>
+                <td id="td-loc">
                   <input type="text" id = "location">
                   <input type="button" value="google-map" data-toggle="modal" data-target="#google-map-Modal" onclick = "initMapModal()">
                 </td>
@@ -63,9 +63,9 @@
                 <td>{{ form.email }}</td>
               </tr>
               <tr>
-                <td> Notifications: </td>
-                <td> {{form.notifTime}} </td>
-                <td>
+                <td > Notifications: </td>
+                <td id ="td-noti"> {{form.notifTime}} </td>
+                <td id = "td-noti-time">
                 <input list="notificationTime" name="notifPref">
                   <datalist id="notificationTime">
                     <option value="hours">
@@ -136,7 +136,7 @@
           <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal">&times;</button>
               <h4 class="modal-title">Google Map</h4>
-              <button type="button" id = "save-loc-btn" >Save Location </button>
+              <button type="button" id = "save-loc-btn" onclick = "saveLocation()">Save Location </button>
           </div>
           <div class="modal-body" id = "map-model-body">
             <input id="pac-input" class="controls" type="text" placeholder="Search Box">

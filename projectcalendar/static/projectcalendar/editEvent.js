@@ -18,4 +18,15 @@ $('.rp-date').click(function(){
 function initMapModal() {
 setTimeout(function () {
     google.maps.event.trigger(map, 'resize');
-}, 1000)};
+}, 500)};
+
+function saveLocation(){
+  var s_box = $('#pac-input');
+  console.log(s_box);
+  var addr = s_box[0].value;
+  console.log(addr);
+  var loc_input = $('#location');
+  loc_input[0].value = addr;
+  
+
+}
