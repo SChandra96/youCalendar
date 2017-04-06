@@ -11,6 +11,10 @@ $('.rp-date').click(function(){
 });
 
 
+$('#google-map-Modal').on('shown.bs.modal', function () {
+    google.maps.event.trigger(map, "resize");
+});
+
 function initAutocomplete() {
     var map = new google.maps.Map(document.getElementById('map'), {
       center: {lat: -33.8688, lng: 151.2195},
