@@ -51,7 +51,7 @@
                 <td> Location: </td>
                 <td>
                   <input type="text" id = "location">
-                  <input type="button" value="google-map" data-toggle="modal" data-target="#google-map-Modal">
+                  <input type="button" value="google-map" data-toggle="modal" data-target="#google-map-Modal" onclick = "initMapModal()">
                 </td>
               </tr>
               <tr>
@@ -136,6 +136,7 @@
           <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal">&times;</button>
               <h4 class="modal-title">Google Map</h4>
+              <button type="button" id = "save-loc-btn" >Save Location </button>
           </div>
           <div class="modal-body" id = "map-model-body">
             <input id="pac-input" class="controls" type="text" placeholder="Search Box">
