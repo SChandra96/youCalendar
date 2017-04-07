@@ -64,9 +64,11 @@ def editEvent(request, id):
 
 	if request.method == 'GET':
 		eventObj = get_object_or_404(Event, id=int(id))
-		context['form'] = EditEventForm({'title':eventObj.title})
-		context['startTime'] = eventObj.startTime
-		context['endTime'] = eventObj.endTime
+		context['form'] = EditEventForm({'title':eventObj.title, 
+			'datepicker': eventObj.startDate })
+		context['startTime'] = eventObj.startTime[:-3]
+		context['endTime'] = eventObj.endTime[:-3]
+		context['location'] = eventObj.location
 		
 		return render(request, 'projectCalendar/editEvent.html', context)
 
@@ -129,13 +131,13 @@ def editEvent(request, id):
 	if (startDate != ''): event.startDate = startDate
 	if (title != ''): event.title = title
 	if (startTime != ''): 
-		if(len(event.startTime) >17):
+		if(len(startTime) >17):
 			event.startTime = startTime
 		else:
 			event.startTime = startTime + ":00"
 	if (endTime != ''): 
 		if(startTime<endTime):
-			if(len(event.endTime) >17):
+			if(len(endTime) >17):
 				event.endTime = endTime
 			else:
 				event.endTime = endTime + ":00"
