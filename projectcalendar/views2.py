@@ -104,6 +104,7 @@ def editEvent(request, id):
 	endTime = request.POST['endTime']
 	email = form.cleaned_data['email']
 	whenToNotify = form.cleaned_data['notifTime']
+	location = request.POST['location']
 	print type(whenToNotify)
 	notificationPref = request.POST['notifPref']
 	if (startDate != ''): event.startDate = startDate
@@ -113,6 +114,8 @@ def editEvent(request, id):
 	if (whenToNotify and notificationPref != ''):
 		event.whenToNotify = whenToNotify
 		event.notificationPref = notificationPref
+	if(location !=''):
+		event.location = location
 	event.save()
 	context['message'] = 'Changes made to this event have been saved to our calendar'
 	if (email != ''):
@@ -175,6 +178,8 @@ def get_list_json(request):
 		if event.notificationPref and event.whenToNotify:
 			event_obj['whenToNotify'] = event.whenToNotify
 		 	event_obj['notificationPref'] = event.notificationPref
+		if event.location:
+			event_obj['location'] = event.location
 		print event_obj			
 		events.append(event_obj)
 
