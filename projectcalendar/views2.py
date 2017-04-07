@@ -40,11 +40,23 @@ def addEvent(request):
 					  startTime=startTime,
 					  endTime=endTime)
 	new_event.save()
+	new_event.admins.add(request.user)
 	context['message'] = 'Your event has been saved to our calendar'
 	UserWithFields.objects.get(user=request.user).events.add(new_event)
 	#invite user by email, to edit event 
 	
 	return redirect('/')
+
+@login_required
+def checkEventPrivacy(request, id):
+	event = get_object_or_404(Event, id=int(id))
+	print request.user
+	if request.user in event.admins.all():
+		print event.admins.all()
+		redirectUrl = '/edit_event/'+ id
+		return redirect(redirectUrl)
+	else:
+		return redirect('/')
 
 @login_required
 def editEvent(request, id):
@@ -104,7 +116,6 @@ def editEvent(request, id):
 	endTime = request.POST['endTime']
 	email = form.cleaned_data['email']
 	whenToNotify = form.cleaned_data['notifTime']
-	print type(whenToNotify)
 	notificationPref = request.POST['notifPref']
 	if (startDate != ''): event.startDate = startDate
 	if (title != ''): event.title = title
@@ -115,26 +126,52 @@ def editEvent(request, id):
 		event.notificationPref = notificationPref
 	event.save()
 	context['message'] = 'Changes made to this event have been saved to our calendar'
+
 	if (email != ''):
+		selectOne = False
 		try:
 			inviteUser = User.objects.get(email=email)
-			token = default_token_generator.make_token(inviteUser)
-			email_body = ("You've been invited to edit event " + event.title +
-			 			 " Please click on the link below to be added to this event " + 
-	                  	 "http://%s%s" % (request.get_host(), reverse('confirm', args=(event.title, email, token))))
-			print email_body
-			send_mail(
-					subject="Being added to an event",
-				  	message= email_body,
-				  	from_email="shikhaac@andrew.cmu.edu",
-			  		recipient_list=[email])
+			decUser = UserWithFields.objects.get(user=inviteUser)
 		except:
 			context['error'] = 'No user with email ID you entered exists'
+			return render(request, 'projectCalendar/editEvent.html', context)
+		
+		if ("privacy-read" in request.POST and "privacy-r&w" not in request.POST):
+			selectOne = True
+			urlArgName = 'readOnly'
+		
+		elif ("privacy-read" not in request.POST and "privacy-r&w" in request.POST):
+			selectOne = True
+			urlArgName = 'readAndWrite'
+
+		if selectOne:
+			if event in decUser.events.all():
+				context['error'] = "The user you are trying to share this event with already has read privileges"
+			
+			elif inviteUser in event.admins.all():
+				context['error'] = "The user you are trying to share this event with already has read and write privileges"
+			
+			else:
+				token = default_token_generator.make_token(inviteUser)
+				email_url = "http://%s%s" % (request.get_host(), reverse(urlArgName, args=(event.title, email, token)))
+				email_body = ("You've been invited to edit event " + event.title +
+				 			 " Please click on the link below to be added to this event " + 
+		                  	  email_url)
+				print email_body
+				send_mail(
+						subject="Being added to an event",
+					  	message= email_body,
+					  	from_email="shikhaac@andrew.cmu.edu",
+				  		recipient_list=[email])
+				context['message'] += 'User has been invited to event ' + event.title + '.'
+	
+		else:
+			context['error'] = "You must select the privacy level for the event. It must be either read only or read and write"
 	
 	return render(request, 'projectCalendar/editEvent.html', context)
 
 @transaction.atomic
-def inviteUserAccept(request, eventTitle, userEmail, token):
+def acceptRead(request, eventTitle, userEmail, token):
     user = get_object_or_404(User, email=userEmail)
     decUser = UserWithFields.objects.get(user=user)
     event = get_object_or_404(Event, title=eventTitle)
@@ -147,6 +184,21 @@ def inviteUserAccept(request, eventTitle, userEmail, token):
     decUser.save()
     return render(request, 'projectCalendar/acceptedInvitation.html', {})
 
+@transaction.atomic
+def acceptRW(request, eventTitle, userEmail, token):
+    user = get_object_or_404(User, email=userEmail)
+    decUser = UserWithFields.objects.get(user=user)
+    event = get_object_or_404(Event, title=eventTitle)
+
+    # Send 404 error if token is invalid
+    if not default_token_generator.check_token(user, token):
+        raise Http404
+
+    decUser.events.add(event)
+    decUser.save()
+    event.admins.add(user)
+    event.save()
+    return render(request, 'projectCalendar/acceptedInvitation.html', {})
 
 def get_list_json(request):
 	events = []

@@ -74,7 +74,7 @@ if (window.location.pathname === '/') {
 				console.log(JSON.stringify(event));
 				
 				var elemId = event["id"];
-				window.location.href = "/edit_event/" + elemId;
+				window.location.href = "/check_event_privacy/" + elemId;
 
 			},
 			eventRender: function(event){

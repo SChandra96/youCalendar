@@ -16,4 +16,9 @@
 }
 td {
     font-weight: bold;
+    padding: 2px 5px;
+
+}
+tr {
+    padding: 25px 50px;
 }

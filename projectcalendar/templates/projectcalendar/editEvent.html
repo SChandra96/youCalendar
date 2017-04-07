@@ -42,7 +42,7 @@
               <tr>
                 <td> Repeat: </td>
                 <td>
-                 <input type="checkbox" id="repeat" data-toggle="modal" data-target="#myModal" 
+                 <input name="repeatCheck" type="checkbox" id="repeat" data-toggle="modal" data-target="#myModal" 
                  />
                 </td>
               </tr>
@@ -53,6 +53,10 @@
               <tr>
                 <td> Invitee's email ID: </td>
                 <td>{{ form.email }}</td>
+                <td> Read:
+                <input name="privacy-read" type="checkbox"> </input> <td>
+                <td> Read/Write: 
+                <input name="privacy-r&w" type="checkbox"> </input> <td>
               </tr>
               <tr>
                 <td> Notifications: </td>

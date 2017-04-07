@@ -14,6 +14,7 @@ urlpatterns = [
     url(r'^$', views.home, name = 'home'),
     url(r'^add_event$', views.addEvent, name='add_event'),
     url(r'^edit_event/(\d+)$', views.editEvent, name='edit_event'),
+    url(r'^check_event_privacy/(\d+)$', views.checkEventPrivacy),
     url(r'^get-list-json$', views.get_list_json),
     # url(r'^get-timezone-json$', views.get_timezone_list),
     url(r'^register$', views.register, name='register'),
@@ -21,6 +22,8 @@ urlpatterns = [
     url(r'^login$', auth_views.login, {'template_name':'projectcalendar/login.html'}, name='login'),
     # # Route to logout a user and send them back to the login page
     url(r'^logout$', auth_views.logout_then_login, name='logout'),
-    url(r'^confirm-registration/(?P<eventTitle>[a-zA-Z0-9_@\+\-]+)/(?P<userEmail>[\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4})/(?P<token>[a-z0-9\-]+)$',
-        views.inviteUserAccept, name='confirm'),
+    url(r'^acceptReadInvitation/(?P<eventTitle>[a-zA-Z0-9_@\+\-]+)/(?P<userEmail>[\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4})/(?P<token>[a-z0-9\-]+)$',
+        views.acceptRead, name='readOnly'),
+    url(r'^acceptReadAndWriteInvitation/(?P<eventTitle>[a-zA-Z0-9_@\+\-]+)/(?P<userEmail>[\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4})/(?P<token>[a-z0-9\-]+)$',
+        views.acceptRW, name='readAndWrite'),
 ]
