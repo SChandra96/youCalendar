@@ -123,7 +123,13 @@ def editEvent(request, id):
 	if (startDate != ''): event.startDate = startDate
 	if (title != ''): event.title = title
 	if (startTime != ''): event.startTime = startTime + ":00"
-	if (endTime != ''): event.endTime = endTime + ":00"
+	if (endTime != ''): 
+		if(startTime<endTime):
+			event.endTime = endTime + ":00"
+		else:
+			context['error'] = 'End Time must be later than Start Time!'
+			return render(request, 'projectCalendar/editEvent.html', context)
+
 	if (whenToNotify and notificationPref != ''):
 		event.whenToNotify = whenToNotify
 		event.notificationPref = notificationPref
