@@ -20,6 +20,7 @@ class EditEventForm(forms.Form):
 		if notifTime and notifTime <= 0:
 			raise forms.ValidationError("You can not enter a negative number for notification preference")
 		return cleaned_data
+		
 
 class RegistrationForm(forms.Form):
 	first_name = forms.CharField(max_length=20)
