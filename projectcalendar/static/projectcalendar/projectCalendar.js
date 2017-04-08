@@ -135,7 +135,8 @@ function addEventPopUP(calevent,event){
 	var yd = 20;
 	var eventJson = JSON.parse(JSON.stringify(calevent));
 	console.log("line 137: "+eventJson);
-	console.log(eventJson.title);
+	console.log(eventJson.id);
+	var eventId = eventJson.id;
 	var contStr = '<div class = "bubble-title">'+eventJson.title+'</div>'
 					+'<div class = "bubbl-fname"> Time </div>';
 					
@@ -151,6 +152,13 @@ function addEventPopUP(calevent,event){
 					+'</div>';
 	}
 
+	var btnStr1 = '<div id = "div-popup-edit-btn">'
+					+'<button type="button" id = "popup-edit-btn" onclick = \
+					"jumpToEditPage('+eventId+')">'
+					+'Edit'
+					+'</button>'
+					+'</div>';
+
 
 
 	var htmlStr = '<div class = "bubblemain"> '
@@ -158,6 +166,7 @@ function addEventPopUP(calevent,event){
 					+'<button type="button" class="close" onclick = "closePopUp(this)">\
 					&times;</button>' 
 					+contStr
+					+btnStr1
 					+'</div>'
 					+'</div>';
 
@@ -174,4 +183,9 @@ function closePopUp(element){
 	// console.log(element);
 	// console.log(win);
 	win.remove();
+}
+
+function jumpToEditPage(eventId){
+	console.log("188: "+eventId);
+	window.location.href = "/check_event_privacy/" + eventId;
 }
