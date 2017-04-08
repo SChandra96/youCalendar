@@ -70,11 +70,11 @@ if (window.location.pathname === '/') {
 			dayClick: function() {
 				alert('a day has been clicked!');
 			},
-			eventClick: function(event, element) {
+			eventClick: function(event, element, ev) {
 				console.log(JSON.stringify(event));
-				
 				var elemId = event["id"];
-				window.location.href = "/check_event_privacy/" + elemId;
+				addEventPopUP(element);
+				// window.location.href = "/check_event_privacy/" + elemId;
 
 			},
 			eventRender: function(event){
@@ -126,4 +126,29 @@ else {
 		console.log(selected);
 		});
 	});
+}
+
+function addEventPopUP(event){
+	var x = event.clientX;
+	var y = event.clientY;
+	var xd = 160;
+	var yd = 20;
+	var htmlStr = '<div class = "bubblemain"> '
+					+'<div class = "bubblecontent"> '
+					+'<button type="button" class="close" onclick = "closePopUp(this)">\
+					&times;</button>' 
+					+'</div>'
+					+'</div>';
+
+	$('#calendar').append(htmlStr);
+	$('.bubblemain').css('top', y+yd);
+	$('.bubblemain').css('left', x-xd);
+
+}
+
+function closePopUp(element){
+	var win = $(element).parent().parent();
+	// console.log(element);
+	// console.log(win);
+	win.remove();
 }

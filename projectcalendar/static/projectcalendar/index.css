@@ -28,3 +28,17 @@
   margin-top:10px;
   width: 180px;
 }
+
+.bubblemain{
+  width: 350px;
+  height: 190px;
+  padding: 6px;
+  outline: none;
+  position:absolute;
+  border:2px;
+  border-style: groove;
+  border-color: #aaa;
+  background-color: #fff;
+  z-index: 10;
+  
+}

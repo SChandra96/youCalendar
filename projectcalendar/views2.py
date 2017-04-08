@@ -78,7 +78,6 @@ def editEvent(request, id):
 
 	event = get_object_or_404(Event, id=int(id))
 
-	print request.POST
 	#if submitted form is repeat form:
 	if 'repeat-form-flag' in request.POST:
 		if(event.endTime == ""):
