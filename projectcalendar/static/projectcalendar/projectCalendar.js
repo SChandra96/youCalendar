@@ -73,7 +73,7 @@ if (window.location.pathname === '/') {
 			eventClick: function(event, element, ev) {
 				console.log(JSON.stringify(event));
 				var elemId = event["id"];
-				addEventPopUP(element);
+				addEventPopUP(event,element);
 				// window.location.href = "/check_event_privacy/" + elemId;
 
 			},
@@ -128,17 +128,40 @@ else {
 	});
 }
 
-function addEventPopUP(event){
+function addEventPopUP(calevent,event){
 	var x = event.clientX;
 	var y = event.clientY;
 	var xd = 160;
 	var yd = 20;
+	var eventJson = JSON.parse(JSON.stringify(calevent));
+	console.log("line 137: "+eventJson);
+	console.log(eventJson.title);
+	var contStr = '<div class = "bubble-title">'+eventJson.title+'</div>'
+					+'<div class = "bubbl-fname"> Time </div>';
+					
+	if(eventJson.end == null){
+		contStr += '<div class = "bubble-fvalue">'
+					+eventJson.start
+					+'</div>';
+	}
+	else{
+		contStr += '<div class = "bubble-fvalue">'
+					+eventJson.start+'~'
+					+eventJson.end
+					+'</div>';
+	}
+
+
+
 	var htmlStr = '<div class = "bubblemain"> '
 					+'<div class = "bubblecontent"> '
 					+'<button type="button" class="close" onclick = "closePopUp(this)">\
 					&times;</button>' 
+					+contStr
 					+'</div>'
 					+'</div>';
+
+	
 
 	$('#calendar').append(htmlStr);
 	$('.bubblemain').css('top', y+yd);
