@@ -138,7 +138,7 @@ function addEventPopUP(calevent,event){
 	console.log(eventJson.id);
 	var eventId = eventJson.id;
 	var contStr = '<div class = "bubble-title">'+eventJson.title+'</div>'
-					+'<div class = "bubbl-fname"> Time </div>';
+					+'<div class = "bubble-fname"> Time </div>';
 					
 	if(eventJson.end == null){
 		contStr += '<div class = "bubble-fvalue">'
@@ -150,6 +150,14 @@ function addEventPopUP(calevent,event){
 					+eventJson.start+'~'
 					+eventJson.end
 					+'</div>';
+	}
+
+	var locStr = "";
+	if(eventJson.location.length > 0){
+		locStr = '<div class = "bubble-fname"> Location </div>'
+				+'<div class = "bubble-fvalue">'
+				+eventJson.location
+				+'</div>';
 	}
 
 	var btnStr1 = '<div id = "div-popup-edit-btn">'
@@ -166,6 +174,7 @@ function addEventPopUP(calevent,event){
 					+'<button type="button" class="close" onclick = "closePopUp(this)">\
 					&times;</button>' 
 					+contStr
+					+locStr
 					+btnStr1
 					+'</div>'
 					+'</div>';
