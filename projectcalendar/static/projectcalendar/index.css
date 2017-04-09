@@ -43,7 +43,7 @@
   
 }
 
-#div-popup-edit-btn{
+#div-popup-edit-btn, #div-popup-del-btn{
   float: right;
   margin-top: 20px;
   margin-right: 10px;

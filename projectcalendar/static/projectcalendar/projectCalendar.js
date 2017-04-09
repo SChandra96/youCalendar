@@ -167,6 +167,13 @@ function addEventPopUP(calevent,event){
 					+'</button>'
 					+'</div>';
 
+	var btnStr2 = '<div id = "div-popup-del-btn">'
+					+'<button type="button" id = "popup-del-btn" onclick = \
+					"deleteEvent('+eventId+')">'
+					+'Delete'
+					+'</button>'
+					+'</div>';
+
 
 
 	var htmlStr = '<div class = "bubblemain"> '
@@ -176,6 +183,7 @@ function addEventPopUP(calevent,event){
 					+contStr
 					+locStr
 					+btnStr1
+					+btnStr2
 					+'</div>'
 					+'</div>';
 
@@ -189,12 +197,13 @@ function addEventPopUP(calevent,event){
 
 function closePopUp(element){
 	var win = $(element).parent().parent();
-	// console.log(element);
-	// console.log(win);
 	win.remove();
 }
 
 function jumpToEditPage(eventId){
-	console.log("188: "+eventId);
 	window.location.href = "/check_event_privacy/" + eventId;
+}
+
+function deleteEvent(eventId){
+	console.log("line 207: " + eventId);
 }
