@@ -58,6 +58,18 @@ def checkEventPrivacy(request, id):
 	else:
 		return redirect('/')
 
+def deleteEvent(request,id):
+	event = get_object_or_404(Event, id=int(id))
+	print request.user
+	if request.user in event.admins.all():
+		print event.admins.all()
+		event.delete();
+		return redirect('/')
+	else:
+		return redirect('/')
+	
+
+
 @login_required
 def editEvent(request, id):
 	context = {}

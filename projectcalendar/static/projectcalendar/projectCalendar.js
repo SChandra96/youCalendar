@@ -158,7 +158,7 @@ function addEventPopUP(calevent,event){
 	}
 
 	var locStr = "";
-	if(!(eventJson.location == "")){
+	if(!(eventJson.location == null || eventJson.location == "None")){
 		locStr = '<div class = "bubble-fname"> Location </div>'
 				+'<div class = "bubble-fvalue">'
 				+eventJson.location
@@ -242,5 +242,5 @@ function jumpToEditPage(eventId){
 
 function deleteEvent(eventId){
 	console.log("line 207: " + eventId);
-
+	window.location.href = "/delete_event/" + eventId;
 }
