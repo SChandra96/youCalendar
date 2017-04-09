@@ -195,9 +195,11 @@ function addEventPopUP(calevent,event){
 	$('#calendar').append(htmlStr);
 
 	win_wid = $(window).width();
+	win_hei = $(window).height();
 	var px = x-xd;
 	var py = y+yd;
 	var bx = $('.bubblemain').width();
+	var by = $('.bubblemain').height()
 	console.log("win_wid: "+win_wid);
 	console.log("pop width: "+ bx);
 	if(px<2){
@@ -206,8 +208,24 @@ function addEventPopUP(calevent,event){
 	else if(px+bx>win_wid){
 		px = win_wid-bx-30;
 	}
+	else{
+		var pi = px/(win_wid/7);
+		px = pi*win_wid/7;
+	}
 
+	if(py+by+20>win_hei){
+		py = win_hei-by-20;
+	}
+	else{
+		var pi = py/(win_hei/10);
+		py = pi*win_hei/10;
+	}
 
+	if(py<140){
+		py = 140;
+	}
+
+	console.log("py: "+py);
 	$('.bubblemain').css('top', py);
 	$('.bubblemain').css('left', px);
 
