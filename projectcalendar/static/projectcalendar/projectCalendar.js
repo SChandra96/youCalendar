@@ -129,6 +129,11 @@ else {
 }
 
 function addEventPopUP(calevent,event){
+	if ($('.bubblemain').length > 0) {
+	// exists.
+		$('.bubblemain').remove();
+	}
+
 	var x = event.clientX;
 	var y = event.clientY;
 	var xd = 160;
@@ -153,7 +158,7 @@ function addEventPopUP(calevent,event){
 	}
 
 	var locStr = "";
-	if(eventJson.location.length > 0){
+	if(!(eventJson.location == "")){
 		locStr = '<div class = "bubble-fname"> Location </div>'
 				+'<div class = "bubble-fvalue">'
 				+eventJson.location
@@ -187,11 +192,24 @@ function addEventPopUP(calevent,event){
 					+'</div>'
 					+'</div>';
 
-	
-
 	$('#calendar').append(htmlStr);
-	$('.bubblemain').css('top', y+yd);
-	$('.bubblemain').css('left', x-xd);
+
+	win_wid = $(window).width();
+	var px = x-xd;
+	var py = y+yd;
+	var bx = $('.bubblemain').width();
+	console.log("win_wid: "+win_wid);
+	console.log("pop width: "+ bx);
+	if(px<2){
+		px = 2;
+	}
+	else if(px+bx>win_wid){
+		px = win_wid-bx-30;
+	}
+
+
+	$('.bubblemain').css('top', py);
+	$('.bubblemain').css('left', px);
 
 }
 
@@ -206,4 +224,5 @@ function jumpToEditPage(eventId){
 
 function deleteEvent(eventId){
 	console.log("line 207: " + eventId);
+
 }
