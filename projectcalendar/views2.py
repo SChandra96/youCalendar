@@ -15,6 +15,9 @@ from django.contrib.auth.tokens import default_token_generator
 # Used to send mail from within Django
 from django.core.mail import send_mail
 import pytz
+import string
+import random 
+from datetime import datetime, timedelta
 
 # Create your views here.
 @login_required
@@ -22,6 +25,46 @@ def home(request):
 	context = {}
 	context['form'] = CreateEventForm()
 	return render(request, 'projectCalendar/index2.html', context)
+
+def createNewAppointmentSlots(event, token, startDate):
+	print "byyyy"
+	fmt = "%Y-%m-%d%H:%M:%S"
+	startTime = datetime.strptime(startDate + event.startTime, fmt)
+	endTime = datetime.strptime(startDate + event.endTime, fmt)
+	numberOfSlots = ((endTime-startTime).seconds/60)/30
+	for i in xrange(1, numberOfSlots+1):
+		apptStartTime = (startTime + timedelta(minutes=30*(i-1))).time()
+		apptStartTimeDB = startDate + "T" + apptStartTime.strftime("%H:%M:%S")
+		apptEndTime = (startTime + timedelta(minutes=30*i)).time()
+		apptEndTimeDB = startDate + "T" + apptEndTime.strftime("%H:%M:%S")
+		newAppt = AppointmentSlot(event=event,
+							  token=token, 
+							  startTime=apptStartTimeDB, 
+							  endTime=apptEndTimeDB, 
+							  isBooked=False)
+		newAppt.save()
+
+def recreateAppointmentSlots(rangeStartDate, rangeEndDate, dateList, event):
+	AppointmentSlot.objects.all().filter(token=event.token).delete()
+	print "come on"
+	fmt = "%Y-%m-%d"
+	startDate = datetime.strptime(rangeStartDate, fmt)
+	endDate = datetime.strptime(rangeEndDate, fmt)
+	numberOfDays = (endDate-startDate).days
+	for i in xrange(numberOfDays+1):
+		curDate = startDate + timedelta(days=i)
+		print curDate.strftime(fmt)
+		if ((curDate.weekday()+1)%7) in dateList:
+			createNewAppointmentSlots(event, event.token, curDate.strftime(fmt))
+
+
+@login_required
+def bookAppointment(request, token, id):
+	appt = get_object_or_404(AppointmentSlot, id=int(id))
+	appt.isBooked = True
+	appt.user = request.user
+	appt.save()
+	return redirect('/appointmentCalendar/'+token)
 
 @login_required
 def addEvent(request):
@@ -35,17 +78,35 @@ def addEvent(request):
 	startDate = form.cleaned_data['datepicker']
 	startTime = request.POST['startTime']+":00"
 	endTime = request.POST['endTime'] + ":00"
+	isAppointment = "appointment" in request.POST and "appointmentSlot" in request.POST
 	new_event = Event(title=form.cleaned_data['title'],
 					  startDate=startDate,
 					  startTime=startTime,
-					  endTime=endTime)
+					  endTime=endTime, isAppointment=isAppointment)
 	new_event.save()
+	if isAppointment:
+		new_event.apptSlot = 30
+		token = ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(10))
+		new_event.token = token
+		new_event.save()
+		createNewAppointmentSlots(new_event, token, startDate)
+		apptCalendarUrl = "http://%s%s" % (request.get_host(), reverse("apptCalendar", args=[token]))
+		print apptCalendarUrl
+		new_event.apptCalendarUrl = apptCalendarUrl
+		new_event.save()
+	
 	new_event.admins.add(request.user)
 	context['message'] = 'Your event has been saved to our calendar'
 	UserWithFields.objects.get(user=request.user).events.add(new_event)
 	#invite user by email, to edit event 
 	
 	return redirect('/')
+
+def seeAptCalendar(request, token):
+	if request.user.is_authenticated:
+		return render(request, 'projectCalendar/appointmentCalendar.html', {})
+	else:
+		return redirect('/login')
 
 @login_required
 def checkEventPrivacy(request, id):
@@ -104,7 +165,7 @@ def editEvent(request, id):
 			ch_str = "repeat-date-"+str(j)
 			if ch_str in request.POST:
 				repeatDate.append(j%7)
-
+		dateList = json.dumps(repeatDate)
 		print "rangeStartDate: " + rangeStartDate
 		print "rangeEndDate: " + rangeEndDate
 		print "repeatDate: " + str(repeatDate)
@@ -116,14 +177,15 @@ def editEvent(request, id):
 			context['error'] = 'EndDate must be later than StartDate!'
 			return render(request, 'projectCalendar/editEvent.html', context)
 
-		if(rangeStartDate != ''):
-			event.rangeStartDate = rangeStartDate
-		if(rangeEndDate != ''):
-			event.rangeEndDate = rangeEndDate
-		if(repeatDate != []):
-			event.DateList = json.dumps(repeatDate)
-
 		event.save()
+		if(rangeStartDate != '' and rangeEndDate != '' and repeatDate != []):
+			event.rangeStartDate = rangeStartDate
+			event.rangeEndDate = rangeEndDate
+			event.DateList = dateList
+			event.save()
+			print event
+			if event.isAppointment:
+				recreateAppointmentSlots(rangeStartDate, rangeEndDate, repeatDate, event)
 
 		context['message'] = 'Changes made to this event have been saved to our calendar'
 		return render(request, 'projectCalendar/editEvent.html', context)
@@ -163,6 +225,11 @@ def editEvent(request, id):
 		event.location = location
 	event.save()
 	context['message'] = 'Changes made to this event have been saved to our calendar'
+	if not 'repeat-form-flag' in request.POST:
+		if event.isAppointment:
+			print "one time"
+			AppointmentSlot.objects.all().filter(token=event.token).delete()
+			createNewAppointmentSlots(event, event.token, event.startDate)
 
 	if (email != ''):
 		selectOne = False
@@ -237,9 +304,9 @@ def acceptRW(request, eventTitle, userEmail, token):
     event.save()
     return render(request, 'projectCalendar/acceptedInvitation.html', {})
 
-def get_list_json(request):
+def makeEventList(qs):
 	events = []
-	for event in UserWithFields.objects.get(user=request.user).events.all():
+	for event in qs:
 		start = event.startDate + 'T' + event.startTime 
 		end = event.startDate + 'T' + event.endTime
 		#
@@ -268,7 +335,34 @@ def get_list_json(request):
 			event_obj['location'] = event.location
 		print event_obj			
 		events.append(event_obj)
+	return events
 
+def makeAppointmentList(qs, color):
+	appointments = []
+	for appointment in qs:
+		appointment_obj = {'title' : appointment.event.title, 'start': appointment.startTime, 'end': appointment.endTime,
+				'id': appointment.id, 'isBooked': appointment.isBooked, 'isAppt': True}
+		if appointment.isBooked:
+			print "hello"
+			appointment_obj['color'] = color
+		appointments.append(appointment_obj)
+	print appointments
+	return appointments
+
+def get_list_json(request):
+	qs = UserWithFields.objects.get(user=request.user).events.all()
+	qs2 = AppointmentSlot.objects.all().filter(user=request.user)
+	bookedAppointmentSlots = []
+	apptEvents = qs.filter(isAppointment=True)
+	for apptEvent in apptEvents:
+		qs3 = AppointmentSlot.objects.all().filter(event=apptEvent)
+		bookedAppointmentSlots += makeAppointmentList(qs3, "grey")
+	events = makeEventList(qs) + makeAppointmentList(qs2, "green") + bookedAppointmentSlots
+	return HttpResponse(json.dumps(events), content_type='application/json')
+
+def get_appt_list_json(request, token):
+	qs = AppointmentSlot.objects.all().filter(token=token)
+	events = makeAppointmentList(qs, "green")
 	return HttpResponse(json.dumps(events), content_type='application/json')
 
 def get_timezone_list():

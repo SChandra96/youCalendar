@@ -62,3 +62,7 @@
 .bubble-fvalue{
   font-size: 14px;
 }
+td{
+  font-weight: bold;
+  padding: 50px;
+}

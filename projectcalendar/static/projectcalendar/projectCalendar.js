@@ -73,9 +73,10 @@ if (window.location.pathname === '/') {
 			eventClick: function(event, element, ev) {
 				console.log(JSON.stringify(event));
 				var elemId = event["id"];
-				addEventPopUP(event,element);
+				if (!(event.isAppt)) {
+					addEventPopUP(event,element);
+				}
 				// window.location.href = "/check_event_privacy/" + elemId;
-
 			},
 			eventRender: function(event){
 				if(event.hasOwnProperty('ranges')){
@@ -98,7 +99,7 @@ if (window.location.pathname === '/') {
 		// 	});
 		// });
 	});
-	window.setInterval(getList, 1800000); //set correctly
+	window.setInterval(getList, 5000); //set correctly
 }
 else {
 	$(document).ready(function() {
