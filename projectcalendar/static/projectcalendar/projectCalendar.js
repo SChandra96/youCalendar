@@ -72,10 +72,10 @@ if (window.location.pathname === '/') {
 			},
 			eventClick: function(event, element) {
 				console.log(JSON.stringify(event));
-				
-				var elemId = event["id"];
-				window.location.href = "/check_event_privacy/" + elemId;
-
+				if (!(event.isAppt)) {
+					var elemId = event["id"];
+					window.location.href = "/check_event_privacy/" + elemId;
+				} 
 			},
 			eventRender: function(event){
 				if(event.hasOwnProperty('ranges')){
@@ -98,7 +98,7 @@ if (window.location.pathname === '/') {
 		// 	});
 		// });
 	});
-	window.setInterval(getList, 1800000); //set correctly
+	window.setInterval(getList, 5000); //set correctly
 }
 else {
 	$(document).ready(function() {

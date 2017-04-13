@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+	<head>
+	    <meta charset="utf-8">
+	    {% load staticfiles %}
+	    <link href= "{% static 'projectcalendar/fullcalendar.css' %}" rel='stylesheet'/>
+	    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	    <link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css"
+        rel = "stylesheet">
+       	<script src = "https://code.jquery.com/jquery-1.10.2.js"></script>
+		<script src="https://code.jquery.com/jquery-3.1.1.min.js"
+            integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+            crossorigin="anonymous"></script>
+        <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="{% static 'projectcalendar/apptCalendar.js' %}" type="text/javascript"></script>
+		<script src="{% static 'projectcalendar/moment.min.js' %}"></script>
+		<script src="{% static 'projectcalendar/fullcalendar.js' %}"></script>
+		<script src="{% static 'projectcalendar/notify.js' %}"> </script>
+		<script src="{% static 'projectcalendar/notify.min.js' %}"> </script>
+		<script src="{% static 'projectcalendar/moment-timezone.js' %}"></script>
+		<link href="{% static 'dist/css/bootstrap.min.css'%}" rel="stylesheet">
+
+		<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+		<link href="{% static 'assets/css/ie10-viewport-bug-workaround.css'%}" rel="stylesheet">
+	</head>
+	<body>
+		<div id='calendar'></div>
+		<!-- Modal -->
+		<div id="bookAppointmentModal" class="modal fade" role="dialog">
+		  <div class="modal-dialog">
+
+		    <!-- Modal content-->
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal">&times;</button>
+		        <h4 class="modal-title"></h4>
+		      </div>
+		      <div class="modal-body"> 
+		        <p> Are you sure you want to book this appointment? </p>
+	        	<button onclick="bookAppointment()"> Yes </button>
+	        	<button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+		        </form>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		      </div>
+		    </div>
+
+		  </div>
+		</div>
+	</body>
+</html>

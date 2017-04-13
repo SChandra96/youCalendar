@@ -14,8 +14,10 @@ urlpatterns = [
     url(r'^$', views.home, name = 'home'),
     url(r'^add_event$', views.addEvent, name='add_event'),
     url(r'^edit_event/(\d+)$', views.editEvent, name='edit_event'),
+    url(r'^book_appt/(?P<token>[a-z0-9\-]+)/(?P<id>[0-9\-]+)$', views.bookAppointment, name='book_appt'),
     url(r'^check_event_privacy/(\d+)$', views.checkEventPrivacy),
-    url(r'^get-list-json$', views.get_list_json),
+    url(r'^get-list-json$', views.get_list_json), 
+    url(r'^get-appt-list-json/(?P<token>[a-z0-9\-]+)$', views.get_appt_list_json),
     # url(r'^get-timezone-json$', views.get_timezone_list),
     url(r'^register$', views.register, name='register'),
     # # Route for built-in authentication with our own custom login page
@@ -26,4 +28,5 @@ urlpatterns = [
         views.acceptRead, name='readOnly'),
     url(r'^acceptReadAndWriteInvitation/(?P<eventTitle>[a-zA-Z0-9_@\+\-]+)/(?P<userEmail>[\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4})/(?P<token>[a-z0-9\-]+)$',
         views.acceptRW, name='readAndWrite'),
+    url(r'^appointmentCalendar/(?P<token>[a-z0-9\-]+)$', views.seeAptCalendar, name='apptCalendar'),
 ]

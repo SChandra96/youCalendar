@@ -15,6 +15,19 @@ class Event(models.Model):
 	notificationPref = models.CharField(max_length=20, null=True)
 	admins = models.ManyToManyField(User, related_name='admins')
 	location = models.CharField(max_length = 100, null = True)
+	isAppointment = models.BooleanField()
+	apptSlot = models.IntegerField(null=True)
+	apptCalendarUrl = models.CharField(max_length=100, null=True)
+	token = models.CharField(max_length=10)
+
+class AppointmentSlot(models.Model):
+	token = models.CharField(max_length=10)
+	event = models.ForeignKey(Event)
+	#These are the only 2 fields which are different from the event's fields. (start time and end time)
+	startTime = models.CharField(max_length=20)
+	endTime = models.CharField(max_length=20)
+	isBooked = models.BooleanField()
+	user = models.ForeignKey(User, null=True)
 
 class UserWithFields(models.Model):
 	user = models.OneToOneField(User, related_name='user')

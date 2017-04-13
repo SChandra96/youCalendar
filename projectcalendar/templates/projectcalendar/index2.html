@@ -78,6 +78,18 @@
 			         	<td>{{ form.datepicker.label_tag }}</td>
 			            <td>{{ form.datepicker }}</td>
 			        </tr>
+			        <tr>
+			         	<td> Type: </td>
+			            <td> 
+			            	<input name="appointment" type="radio"> Appointment </input>
+			            </td>
+			        </tr>
+			        <tr>
+			         	<td> Offer as </td>
+			            <td> 
+			            	<input name="appointmentSlot" type="radio"> Slots of 30 minutes </input>
+			            </td>
+			        </tr>
 	        	</table>
 	        	{% csrf_token %}
 	        	<button> Submit </button>
