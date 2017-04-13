@@ -341,28 +341,28 @@ def makeAppointmentList(qs, color):
 	appointments = []
 	for appointment in qs:
 		appointment_obj = {'title' : appointment.event.title, 'start': appointment.startTime, 'end': appointment.endTime,
-				'id': appointment.id, 'isBooked': appointment.isBooked, 'isAppt': True}
+				'id': appointment.id, 'isBooked': appointment.isBooked, 'color': color, 'isApptSlot': True}
 		if appointment.isBooked:
-			print "hello"
-			appointment_obj['color'] = color
+			appointment_obj['color'] = 'green'
 		appointments.append(appointment_obj)
 	print appointments
 	return appointments
 
+
 def get_list_json(request):
 	qs = UserWithFields.objects.get(user=request.user).events.all()
-	qs2 = AppointmentSlot.objects.all().filter(user=request.user)
-	bookedAppointmentSlots = []
+	qs2 = AppointmentSlot.objects.all().filter(user=request.user) #appt slots i signed up for
+	myAppointmentSlots = [] #appt slots created by me
 	apptEvents = qs.filter(isAppointment=True)
 	for apptEvent in apptEvents:
 		qs3 = AppointmentSlot.objects.all().filter(event=apptEvent)
-		bookedAppointmentSlots += makeAppointmentList(qs3, "grey")
-	events = makeEventList(qs) + makeAppointmentList(qs2, "green") + bookedAppointmentSlots
+		myAppointmentSlots += makeAppointmentList(qs3, "grey")
+	events = makeEventList(qs) + makeAppointmentList(qs2, "blue") + myAppointmentSlots
 	return HttpResponse(json.dumps(events), content_type='application/json')
 
 def get_appt_list_json(request, token):
 	qs = AppointmentSlot.objects.all().filter(token=token)
-	events = makeAppointmentList(qs, "green")
+	events = makeAppointmentList(qs, "blue")
 	return HttpResponse(json.dumps(events), content_type='application/json')
 
 def get_timezone_list():

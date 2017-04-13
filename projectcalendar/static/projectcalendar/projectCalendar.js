@@ -73,9 +73,8 @@ if (window.location.pathname === '/') {
 			eventClick: function(event, element, ev) {
 				console.log(JSON.stringify(event));
 				var elemId = event["id"];
-				if (!(event.isAppt)) {
-					addEventPopUP(event,element);
-				}
+				
+				addEventPopUP(event,element);
 				// window.location.href = "/check_event_privacy/" + elemId;
 			},
 			eventRender: function(event){
@@ -166,66 +165,77 @@ function addEventPopUP(calevent,event){
 				+'</div>';
 	}
 
-	var btnStr1 = '<div id = "div-popup-edit-btn">'
+	if (calevent.isApptSlot == null) {
+		console.log(event);
+		var btnStr1 = '<div id = "div-popup-edit-btn">'
 					+'<button type="button" id = "popup-edit-btn" onclick = \
 					"jumpToEditPage('+eventId+')">'
 					+'Edit'
 					+'</button>'
 					+'</div>';
 
-	var btnStr2 = '<div id = "div-popup-del-btn">'
-					+'<button type="button" id = "popup-del-btn" onclick = \
-					"deleteEvent('+eventId+')">'
-					+'Delete'
-					+'</button>'
-					+'</div>';
+		var btnStr2 = '<div id = "div-popup-del-btn">'
+						+'<button type="button" id = "popup-del-btn" onclick = \
+						"deleteEvent('+eventId+')">'
+						+'Delete'
+						+'</button>'
+						+'</div>';
 
 
 
-	var htmlStr = '<div class = "bubblemain"> '
-					+'<div class = "bubblecontent"> '
-					+'<button type="button" class="close" onclick = "closePopUp(this)">\
-					&times;</button>' 
-					+contStr
-					+locStr
-					+btnStr1
-					+btnStr2
-					+'</div>'
-					+'</div>';
+		var htmlStr = '<div class = "bubblemain"> '
+						+'<div class = "bubblecontent"> '
+						+'<button type="button" class="close" onclick = "closePopUp(this)">\
+						&times;</button>' 
+						+contStr
+						+locStr
+						+btnStr1
+						+btnStr2
+						+'</div>'
+						+'</div>';
+		}
+		else {
+			var htmlStr = '<div class = "bubblemain"> '
+						+'<div class = "bubblecontent"> '
+						+'<button type="button" class="close" onclick = "closePopUp(this)">\
+						&times;</button>' 
+						+contStr
+						+locStr
+						+'</div>'
+						+'</div>';
+		}
+		$('#calendar').append(htmlStr);
 
-	$('#calendar').append(htmlStr);
+		win_wid = $(window).width();
+		win_hei = $(window).height();
+		var px = x-xd;
+		var py = y+yd;
+		var bx = $('.bubblemain').width();
+		var by = $('.bubblemain').height()
+		console.log("win_wid: "+win_wid);
+		console.log("pop width: "+ bx);
+		if(px<2){
+			px = 2;
+		}
+		else if(px+bx>win_wid){
+			px = win_wid-bx-30;
+		}
+		else{
+			var pi = px/(win_wid/7);
+			px = pi*win_wid/7;
+		}
 
-	win_wid = $(window).width();
-	win_hei = $(window).height();
-	var px = x-xd;
-	var py = y+yd;
-	var bx = $('.bubblemain').width();
-	var by = $('.bubblemain').height()
-	console.log("win_wid: "+win_wid);
-	console.log("pop width: "+ bx);
-	if(px<2){
-		px = 2;
-	}
-	else if(px+bx>win_wid){
-		px = win_wid-bx-30;
-	}
-	else{
-		var pi = px/(win_wid/7);
-		px = pi*win_wid/7;
-	}
+		if(py+by+20>win_hei){
+			py = win_hei-by-20;
+		}
+		else{
+			var pi = py/(win_hei/10);
+			py = pi*win_hei/10;
+		}
 
-	if(py+by+20>win_hei){
-		py = win_hei-by-20;
-	}
-	else{
-		var pi = py/(win_hei/10);
-		py = pi*win_hei/10;
-	}
-
-	if(py<140){
-		py = 140;
-	}
-
+		if(py<140){
+			py = 140;
+		}
 	console.log("py: "+py);
 	$('.bubblemain').css('top', py);
 	$('.bubblemain').css('left', px);
