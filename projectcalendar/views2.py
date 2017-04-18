@@ -333,6 +333,9 @@ def makeEventList(qs):
 		 	event_obj['notificationPref'] = event.notificationPref
 		if event.location:
 			event_obj['location'] = event.location
+		if event.isAppointment: 
+			event_obj['apptEvent'] = True
+			event_obj['apptURL'] = event.apptCalendarUrl
 		print event_obj			
 		events.append(event_obj)
 	return events
@@ -341,7 +344,8 @@ def makeAppointmentList(qs, color):
 	appointments = []
 	for appointment in qs:
 		appointment_obj = {'title' : appointment.event.title, 'start': appointment.startTime, 'end': appointment.endTime,
-				'id': appointment.id, 'isBooked': appointment.isBooked, 'color': color, 'isApptSlot': True}
+				'id': appointment.id, 'isBooked': appointment.isBooked, 'color': color, 
+				'isApptSlot': True}
 		if appointment.isBooked:
 			appointment_obj['color'] = 'green'
 		appointments.append(appointment_obj)
