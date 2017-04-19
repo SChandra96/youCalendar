@@ -65,7 +65,8 @@ if (window.location.pathname === '/') {
 		$('#calendar').fullCalendar({
 			// put your options and callbacks here
 			header: {left: 'title month, agendaWeek', right: 'prev, next'},
-			defaultView: 'basicWeek',
+			// defaultView: 'basicWeek',
+			defaultView: 'agendaWeek',
 			events:'/get-list-json',
 			dayClick: function() {
 				alert('a day has been clicked!');
