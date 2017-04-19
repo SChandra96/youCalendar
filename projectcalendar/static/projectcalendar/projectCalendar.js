@@ -145,15 +145,21 @@ function addEventPopUP(calevent,event){
 	var contStr = '<div class = "bubble-title">'+eventJson.title+'</div>'
 					+'<div class = "bubble-fname"> Time </div>';
 					
+	var start_date = eventJson.start.substring(0,10);
+	var start_time = eventJson.start.substring(11,16);
+	var start_str = start_date+" "+start_time;
 	if(eventJson.end == null){
 		contStr += '<div class = "bubble-fvalue">'
-					+eventJson.start
+					+start_str
 					+'</div>';
 	}
 	else{
+		var end_date = eventJson.end.substring(0,10);
+		var end_time = eventJson.end.substring(11,16);
+		var end_str = end_date+" "+end_time;
 		contStr += '<div class = "bubble-fvalue">'
-					+eventJson.start+'~'
-					+eventJson.end
+					+start_str+' ~ '
+					+end_str
 					+'</div>';
 	}
 
