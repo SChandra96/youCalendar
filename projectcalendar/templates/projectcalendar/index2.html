@@ -27,29 +27,41 @@
 	</head>
 	<body>
 
-		<div class="blog-masthead" id = "navigator">
+		<header>
+	   		<div class="blog-masthead" id = "navigator">
 			<div class="container">
 				<nav class="blog-nav">
-		</nav>
+				</nav>
 			</div>  
-		</div>
+			</div>
 
-		<div class="user-info">
-			<form action="{% url 'logout' %}" method="get" id = "logout_form">
-				<button id = "logout-button" class="btn btn-lg btn-primary btn-block" type="submit">Logout</button>
-			</form>
-			<a data-toggle="modal" data-target="#myModal"> Add Event</a>
+			<div class="user-info">
+					<form action="{% url 'logout' %}" method="get" id = "logout_form">
+						<button id = "logout-button" class="btn btn-lg btn-primary btn-block" type="submit">Logout</button>
+					</form>
+			</div>
+
+			<div class="user-info">
+				 <a data-toggle="modal" data-target="#myModal" class="btn btn-lg btn-primary btn-block" > Add Event</a> 
+			</div>
+
+			</div>
+		</header>
+		<div>
+			<nav>
+			<!-- Will be replaced by calendar names-->
+			  <ul>
+			    <li><a href="#">London</a></li>
+			    <li><a href="#">Paris</a></li>
+			    <li><a href="#">Tokyo</a></li>
+			  </ul>
+			  <button class="createCalendar" data-toggle="modal" data-target="#createCalendarModal"> Create new calendar </button> 
+			</nav>
+			<article> 
+				<div id='calendar'></div>
+			</article>
 		</div>
-		
-		<!--<div class="timezone-div" id = "timezone-div">
-			<select id="timezone">
-				<option value='' selected>none</option>
-				<option value='local'>local</option>
-				<option value='UTC'>UTC</option>
-			</select>
-		</div> -->
-		<div id='calendar'></div>
-		 <!-- Modal -->
+		 <!-- Modal to add event-->
 		<div class="modal fade" id="myModal" role="dialog">
 		<div class="modal-dialog">
 
@@ -107,5 +119,29 @@
       
     	</div>
   	</div>
+
+	  	<div id="createCalendarModal" class="modal fade" role="dialog">
+		  <div class="modal-dialog">
+
+		    <!-- Modal content-->
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal">&times;</button>
+		        <h4 class="modal-title">Create calendar</h4>
+		      </div>
+		      <div class="modal-body">
+		        <form>
+		        	Calendar Name: <input type="text"> </input>
+		        	{% csrf_token %}
+	        		<button> Submit </button>
+		        </form>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		      </div>
+		    </div>
+
+		  </div>
+		</div>
 	</body>
 </html>

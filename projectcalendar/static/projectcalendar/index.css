@@ -11,6 +11,10 @@
   height: 45px;
   float: right;
 }
+.createCalendar {
+  background-color: #337ab7;
+  color: white;
+}
 #navigator{
   height: 45px;
   width: 5px;
@@ -65,4 +69,33 @@
 td{
   font-weight: bold;
   padding: 50px;
+}
+nav {
+  float: left;
+  width: 10%;
+  margin: 0;
+  padding: 1em;
+}
+  
+article {
+  margin-left: 170px;
+  border-left: 1px solid gray;
+  padding: 1em;
+  overflow: hidden;
+}
+
+header {
+  padding: 1em;
+  color: white;
+  background-color: grey;
+  border-bottom: 1px;
+  clear: left;
+  text-align: center;
+}
+body {
+  width:100%;
+}
+p {
+  text-align: center;
+  font-size: 100%;
 }
