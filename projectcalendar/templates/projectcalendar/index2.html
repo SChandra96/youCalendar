@@ -30,15 +30,20 @@
 		<div class="blog-masthead" id = "navigator">
 			<div class="container">
 				<nav class="blog-nav">
-		</nav>
+					<div id = "addEvent-div">
+			<button id = "addEvent-btn" data-toggle="modal" class="btn btn-lg btn-primary btn-block"data-target="#myModal"> Add Event</button>
+				</div>
+
+				</nav>
 			</div>  
 		</div>
-
+		
 		<div class="user-info">
+			
 			<form action="{% url 'logout' %}" method="get" id = "logout_form">
 				<button id = "logout-button" class="btn btn-lg btn-primary btn-block" type="submit">Logout</button>
 			</form>
-			<a data-toggle="modal" data-target="#myModal"> Add Event</a>
+			
 		</div>
 		
 		<!--<div class="timezone-div" id = "timezone-div">
