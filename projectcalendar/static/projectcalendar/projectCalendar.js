@@ -57,76 +57,82 @@ function notify(events) {
 	} 	
 }
 
-if (window.location.pathname === '/') { 
-	$(document).ready(function() {
+function refresh(){
+	if (window.location.pathname === '/') { 
+		$(document).ready(function() {
+			console.log("line 63");
+			// page is now ready, initialize the calendar...
 
-		// page is now ready, initialize the calendar...
+			$('#calendar').fullCalendar({
+				// put your options and callbacks here
+				header: {left: 'title month, agendaWeek', right: 'prev, next'},
+				// defaultView: 'basicWeek',
+				defaultView: 'agendaWeek',
+				events:'/get-list-json',
+				dayClick: function() {
+					alert('a day has been clicked!');
+				},
+				eventClick: function(event, element, ev) {
+					console.log(JSON.stringify(event));
+					var elemId = event["id"];
+					
+					addEventPopUP(event,element);
+					// window.location.href = "/check_event_privacy/" + elemId;
+				},
+				eventRender: function(event){
+					if(event.hasOwnProperty('ranges')){
+						return (event.ranges.filter(function(range){ // test event against all the ranges
+							return (event.start.isBefore(range.r_end) &&
+									event.end.isAfter(range.r_start));
+						}).length)>0; //if it isn't in one of the ranges, don't render it (by returning false)
+				}},
 
-		$('#calendar').fullCalendar({
-			// put your options and callbacks here
-			header: {left: 'title month, agendaWeek', right: 'prev, next'},
-			defaultView: 'basicWeek',
-			events:'/get-list-json',
-			dayClick: function() {
-				alert('a day has been clicked!');
-			},
-			eventClick: function(event, element, ev) {
-				console.log(JSON.stringify(event));
-				var elemId = event["id"];
-				
-				addEventPopUP(event,element);
-				// window.location.href = "/check_event_privacy/" + elemId;
-			},
-			eventRender: function(event){
-				if(event.hasOwnProperty('ranges')){
-					return (event.ranges.filter(function(range){ // test event against all the ranges
-						return (event.start.isBefore(range.r_end) &&
-								event.end.isAfter(range.r_start));
-					}).length)>0; //if it isn't in one of the ranges, don't render it (by returning false)
-			}},
+			});
+			getList();
 
+			// $.getJSON('get-timezone-list', function(timezones) {
+			// 	$.each(timezones, function(i, timezone) {
+			// 		if (timezone != 'UTC') { // UTC is already in the list
+			// 			$('#timezone').append(
+			// 				$("<option/>").text(timezone).attr('value', timezone)
+			// 			);
+			// 		}
+			// 	});
+			// });
 		});
-		getList();
+		window.setInterval(getList, 5000); //set correctly
+	}
+	else {
+		$(document).ready(function() {
+			$( "#id_datepicker" ).datepicker({
+				dateFormat:"yy-mm-dd",
+			});
+			$("#id_datepicker").on("change",function(){
+			var selected = $(this).val();
+			console.log(selected);
+			});
 
-		// $.getJSON('get-timezone-list', function(timezones) {
-		// 	$.each(timezones, function(i, timezone) {
-		// 		if (timezone != 'UTC') { // UTC is already in the list
-		// 			$('#timezone').append(
-		// 				$("<option/>").text(timezone).attr('value', timezone)
-		// 			);
-		// 		}
-		// 	});
-		// });
-	});
-	window.setInterval(getList, 5000); //set correctly
+			$( "#id_datepicker_st" ).datepicker({
+				dateFormat:"yy-mm-dd",
+			});
+			$("#id_datepicker_st").on("change",function(){
+			var selected = $(this).val();
+			console.log(selected);
+			});
+
+			$( "#id_datepicker_end" ).datepicker({
+				dateFormat:"yy-mm-dd",
+			});
+			$("#id_datepicker_end").on("change",function(){
+			var selected = $(this).val();
+			console.log(selected);
+			});
+		});
+	}
 }
-else {
-	$(document).ready(function() {
-		$( "#id_datepicker" ).datepicker({
-			dateFormat:"yy-mm-dd",
-		});
-		$("#id_datepicker").on("change",function(){
-		var selected = $(this).val();
-		console.log(selected);
-		});
 
-		$( "#id_datepicker_st" ).datepicker({
-			dateFormat:"yy-mm-dd",
-		});
-		$("#id_datepicker_st").on("change",function(){
-		var selected = $(this).val();
-		console.log(selected);
-		});
-
-		$( "#id_datepicker_end" ).datepicker({
-			dateFormat:"yy-mm-dd",
-		});
-		$("#id_datepicker_end").on("change",function(){
-		var selected = $(this).val();
-		console.log(selected);
-		});
-	});
-}
+window.onload = refresh;
+setInterval(function(){$('#calendar').fullCalendar('refetchEvents')}, 3000);
 
 function addEventPopUP(calevent,event){
 	if ($('.bubblemain').length > 0) {
@@ -145,15 +151,21 @@ function addEventPopUP(calevent,event){
 	var contStr = '<div class = "bubble-title">'+eventJson.title+'</div>'
 					+'<div class = "bubble-fname"> Time </div>';
 					
+	var start_date = eventJson.start.substring(0,10);
+	var start_time = eventJson.start.substring(11,16);
+	var start_str = start_date+" "+start_time;
 	if(eventJson.end == null){
 		contStr += '<div class = "bubble-fvalue">'
-					+eventJson.start
+					+start_str
 					+'</div>';
 	}
 	else{
+		var end_date = eventJson.end.substring(0,10);
+		var end_time = eventJson.end.substring(11,16);
+		var end_str = end_date+" "+end_time;
 		contStr += '<div class = "bubble-fvalue">'
-					+eventJson.start+'~'
-					+eventJson.end
+					+start_str+' ~ '
+					+end_str
 					+'</div>';
 	}
 

@@ -139,3 +139,7 @@ tr {
   text-align: left;
   vertical-align: middle;
 }
+
+#dir-to-main-div{
+    margin-top: 10px;
+}

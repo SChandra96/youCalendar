@@ -1,14 +1,38 @@
 #logout-button{
   width: 110px;
   height: 40px;
-  margin-left: 65px;
+  margin-left: 20px;
   margin-top: 2px;
   border-color: #337ab7;
   
 }
-.user-info{
-  width: 180px;
+
+
+#addEvent-div{
+  width: 120px;
+  margin-left: 1010px;
+}
+#addEvent-btn{
+  width: 120px;
+  height: 40px;
+  margin-left: 0px;
+  margin-top: 2px;
+  border-color: #337ab7;
+  
+  
+}
+#logout_form{
   height: 45px;
+  width: 120px;
+  float: right;
+}
+#logout-button{
+  float: right;
+}
+.user-info{
+  width: 120px;
+  height: 45px;
+  margin-right: 2px;
   float: right;
 }
 .createCalendar {
@@ -19,6 +43,10 @@
   height: 45px;
   width: 5px;
   display: inline-block;
+}
+
+#calendar{
+  margin-top: 5px;
 }
 
 #timezone-div{
