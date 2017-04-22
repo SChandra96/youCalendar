@@ -52,7 +52,7 @@
                 <td > Location: </td>
                 <td id="td-loc">
                   <input type="text" id = "location" name = 'location' value = "{{location}}">
-                  <input type="button" value="google-map" data-toggle="modal" data-target="#google-map-Modal" onclick = "initMapModal()">
+                  <input type="button" id = "google-map-btn" value="google-map" data-toggle="modal" data-target="#google-map-Modal" onclick = "initMapModal()">
                 </td>
               </tr>
               <tr>
@@ -61,17 +61,17 @@
               </tr>
               <tr>
                 <td> Invitee's email ID: </td>
-                <td>{{ form.email }}</td>
-                <td> Read:
+                <td id = "email-td0">{{ form.email }}</td>
+                <td id = "email-td1"> Read:
                 <input name="privacy-read" type="checkbox"> </input> <td>
-                <td> Read/Write: 
+                <td id = "email-td2"> Read/Write: 
                 <input name="privacy-r&w" type="checkbox"> </input> <td>
               </tr>
               <tr>
                 <td > Notifications: </td>
                 <td id ="td-noti"> {{form.notifTime}} </td>
                 <td id = "td-noti-time">
-                <input list="notificationTime" name="notifPref">
+                <input id = "notifPref" list="notificationTime" name="notifPref">
                   <datalist id="notificationTime">
                     <option value="hours">
                     <option value="minutes">

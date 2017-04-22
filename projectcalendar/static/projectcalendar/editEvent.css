@@ -1,3 +1,6 @@
+#id_title{
+    width: 350px;
+}
 .message {
     color:blue;
     text-align: center;
@@ -26,12 +29,32 @@ tr {
 }
 
 #td-loc{
-    width: 500px;
+    width: 700px;
 
 }
 #location{
-    width: 350px;
+    width: 450px;
     margin-right: 10px;
+}
+#id_datepicker{
+    width: 104px;
+}
+/*#google-map-btn{
+    float: right;
+}*/
+#id_email{
+    width: 300px;
+}
+#email-td0{
+    /*width: 400px;*/
+}
+#email-td1{
+    float: left;
+    margin-left: -380px;
+}
+#email-td2{
+    float: left;
+    margin-left: -320px;
 }
 #save-loc-btn{
     float: right;
@@ -44,8 +67,11 @@ tr {
 }
 
 #td-noti-time{
-    margin-left: -100px;*/
-    float: right;
+    float: left;
+    margin-left: -610px;
+}
+#id_notifTime,#notifPref{
+    width: 80px;
 }
 
 #google-map-content{
