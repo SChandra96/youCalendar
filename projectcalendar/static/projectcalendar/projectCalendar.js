@@ -65,7 +65,7 @@ function refresh(){
 
 			$('#calendar').fullCalendar({
 				// put your options and callbacks here
-				header: {left: 'title month, agendaWeek', right: 'prev, next'},
+				header: {left: 'title month, agendaWeek, listWeek', right: 'prev, next'},
 				// defaultView: 'basicWeek',
 				defaultView: 'agendaWeek',
 				events:'/get-list-json',
