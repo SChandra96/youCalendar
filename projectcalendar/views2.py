@@ -22,7 +22,7 @@ from datetime import datetime, timedelta
 # Create your views here.
 @login_required
 def home(request):
-	context = {}
+	context = getCalendarNames(request.user)
 	context['form'] = CreateEventForm()
 	return render(request, 'projectCalendar/index2.html', context)
 
@@ -31,11 +31,12 @@ def createNewAppointmentSlots(event, token, startDate):
 	fmt = "%Y-%m-%d%H:%M:%S"
 	startTime = datetime.strptime(startDate + event.startTime, fmt)
 	endTime = datetime.strptime(startDate + event.endTime, fmt)
-	numberOfSlots = ((endTime-startTime).seconds/60)/30
+	slotDuration= event.apptSlot
+	numberOfSlots = ((endTime-startTime).seconds/60)/slotDuration
 	for i in xrange(1, numberOfSlots+1):
-		apptStartTime = (startTime + timedelta(minutes=30*(i-1))).time()
+		apptStartTime = (startTime + timedelta(minutes=slotDuration*(i-1))).time()
 		apptStartTimeDB = startDate + "T" + apptStartTime.strftime("%H:%M:%S")
-		apptEndTime = (startTime + timedelta(minutes=30*i)).time()
+		apptEndTime = (startTime + timedelta(minutes=slotDuration*i)).time()
 		apptEndTimeDB = startDate + "T" + apptEndTime.strftime("%H:%M:%S")
 		newAppt = AppointmentSlot(event=event,
 							  token=token, 
@@ -66,9 +67,16 @@ def bookAppointment(request, token, id):
 	appt.save()
 	return redirect('/appointmentCalendar/'+token)
 
+def getCalendarNames(user):
+	decUser = get_object_or_404(UserWithFields, user=user)
+	context = {'calNames': []}
+	for calendar in decUser.calendar.all():
+		context['calNames'].append(calendar.name)
+	return context
+
 @login_required
 def addEvent(request):
-	context = {}
+	context = getCalendarNames(request.user)
 	context['form'] = CreateEventForm()
 	if request.method == 'GET':
 		return render(request, 'projectCalendar/index2.html', context)
@@ -79,13 +87,16 @@ def addEvent(request):
 	startTime = request.POST['startTime']+":00"
 	endTime = request.POST['endTime'] + ":00"
 	isAppointment = "appointment" in request.POST and "appointmentSlot" in request.POST
+	calendarName = request.POST['calName']
+	print calendarName
+	calendar = Calendar.objects.all().get(name=calendarName)
 	new_event = Event(title=form.cleaned_data['title'],
 					  startDate=startDate,
 					  startTime=startTime,
-					  endTime=endTime, isAppointment=isAppointment)
+					  endTime=endTime, isAppointment=isAppointment, calendar=calendar)
 	new_event.save()
 	if isAppointment:
-		new_event.apptSlot = 30
+		new_event.apptSlot = int(request.POST["slotTime"])
 		token = ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(10))
 		new_event.token = token
 		new_event.save()
@@ -101,6 +112,18 @@ def addEvent(request):
 	#invite user by email, to edit event 
 	
 	return redirect('/')
+
+@login_required
+def createCalendar(request):
+	if request.method == 'POST':
+		name = request.POST['calendarName']
+		decUser = get_object_or_404(UserWithFields.objects, user=request.user)
+		new_calendar = Calendar(name=name)
+		new_calendar.save()
+		decUser.calendar.add(new_calendar)
+		decUser.save()
+		return redirect('/')
+
 
 def seeAptCalendar(request, token):
 	if request.user.is_authenticated:
@@ -352,6 +375,22 @@ def makeAppointmentList(qs, color):
 	print appointments
 	return appointments
 
+def get_cal_specific_evtList(request, calNames):
+	calendarNames = calNames.split(",")
+	calEvents = []
+	myAppointmentSlots = []
+	userEventsQS = UserWithFields.objects.get(user=request.user).events.all()
+	#get all events on calendars owned by user.
+	for calName in calendarNames:
+		calendar = Calendar.objects.all().get(name=calName)
+		qs = userEventsQS.filter(calendar=calendar)
+		calEvents+= makeEventList(qs)
+		apptEvents = qs.filter(isAppointment=True)
+		for apptEvent in apptEvents:
+			qs3 = AppointmentSlot.objects.all().filter(event=apptEvent)
+			myAppointmentSlots += makeAppointmentList(qs3, "grey")
+	events = calEvents + myAppointmentSlots
+	return HttpResponse(json.dumps(events), content_type='application/json')
 
 def get_list_json(request):
 	qs = UserWithFields.objects.get(user=request.user).events.all()

@@ -31,7 +31,6 @@
 	   		<div class="blog-masthead" id = "navigator">
 			<div class="container">
 				<nav class="blog-nav">
-<<<<<<< HEAD
 				</nav>
 			</div>  
 			</div>
@@ -51,11 +50,16 @@
 		<div>
 			<nav>
 			<!-- Will be replaced by calendar names-->
-			  <ul>
-			    <li><a href="#">London</a></li>
-			    <li><a href="#">Paris</a></li>
-			    <li><a href="#">Tokyo</a></li>
-			  </ul>
+			   <form>
+			   		<table>
+			   			{% for calName in calNames %}
+			   			<tr>
+			   				<td> <input type="checkbox" name="calendars" value="{{calName}}"></input> </td>
+			   				<td> {{calName}} </td>
+			   			</tr>
+			   			{% endfor %}
+			   		</table>
+			   </form>
 			  <button class="createCalendar" data-toggle="modal" data-target="#createCalendarModal"> Create new calendar </button> 
 			</nav>
 			<article> 
@@ -91,6 +95,18 @@
 			         	<td>{{ form.datepicker.label_tag }}</td>
 			            <td>{{ form.datepicker }}</td>
 			        </tr>
+			        <tr>	
+			        	<td> Calendar Name: </td>
+			        	<td>
+		                <input list="names" name="calName">
+		                  <datalist id="names">
+		                  	{% for calName in calNames %}
+		                  		<option value="{{calName}}">
+		                  	{% endfor %}
+		                  </datalist>
+		                  </input> 
+                	</td>
+			        </tr>
 			        <tr>
 			         	<td> Type: </td>
 			            <td> 
@@ -100,7 +116,9 @@
 			        <tr>
 			         	<td> Offer as </td>
 			            <td> 
-			            	<input name="appointmentSlot" type="radio"> Slots of 30 minutes </input>
+			            	<input name="appointmentSlot" type="radio"> 
+			            	Slots of  <input type="number" name="slotTime" min="15" max="60"> minutes 
+			            	</input>
 			            </td>
 			        </tr>
 	        	</table>
@@ -131,8 +149,8 @@
 		        <h4 class="modal-title">Create calendar</h4>
 		      </div>
 		      <div class="modal-body">
-		        <form>
-		        	Calendar Name: <input type="text"> </input>
+		        <form method="post"  action="{% url 'create_calendar' %}">
+		        	Calendar Name: <input type="text" name="calendarName" required> </input>
 		        	{% csrf_token %}
 	        		<button> Submit </button>
 		        </form>

@@ -1,3 +1,4 @@
+
 function getList() {
     $.ajax({
         url: "/get-list-json",
@@ -56,84 +57,6 @@ function notify(events) {
 		}
 	} 	
 }
-
-function refresh(){
-	if (window.location.pathname === '/') { 
-		$(document).ready(function() {
-			console.log("line 63");
-			// page is now ready, initialize the calendar...
-
-			$('#calendar').fullCalendar({
-				// put your options and callbacks here
-				header: {left: 'title month, agendaWeek', right: 'prev, next'},
-				// defaultView: 'basicWeek',
-				defaultView: 'agendaWeek',
-				events:'/get-list-json',
-				dayClick: function() {
-					alert('a day has been clicked!');
-				},
-				eventClick: function(event, element, ev) {
-					console.log(JSON.stringify(event));
-					var elemId = event["id"];
-					
-					addEventPopUP(event,element);
-					// window.location.href = "/check_event_privacy/" + elemId;
-				},
-				eventRender: function(event){
-					if(event.hasOwnProperty('ranges')){
-						return (event.ranges.filter(function(range){ // test event against all the ranges
-							return (event.start.isBefore(range.r_end) &&
-									event.end.isAfter(range.r_start));
-						}).length)>0; //if it isn't in one of the ranges, don't render it (by returning false)
-				}},
-
-			});
-			getList();
-
-			// $.getJSON('get-timezone-list', function(timezones) {
-			// 	$.each(timezones, function(i, timezone) {
-			// 		if (timezone != 'UTC') { // UTC is already in the list
-			// 			$('#timezone').append(
-			// 				$("<option/>").text(timezone).attr('value', timezone)
-			// 			);
-			// 		}
-			// 	});
-			// });
-		});
-		window.setInterval(getList, 5000); //set correctly
-	}
-	else {
-		$(document).ready(function() {
-			$( "#id_datepicker" ).datepicker({
-				dateFormat:"yy-mm-dd",
-			});
-			$("#id_datepicker").on("change",function(){
-			var selected = $(this).val();
-			console.log(selected);
-			});
-
-			$( "#id_datepicker_st" ).datepicker({
-				dateFormat:"yy-mm-dd",
-			});
-			$("#id_datepicker_st").on("change",function(){
-			var selected = $(this).val();
-			console.log(selected);
-			});
-
-			$( "#id_datepicker_end" ).datepicker({
-				dateFormat:"yy-mm-dd",
-			});
-			$("#id_datepicker_end").on("change",function(){
-			var selected = $(this).val();
-			console.log(selected);
-			});
-		});
-	}
-}
-
-window.onload = refresh;
-setInterval(function(){$('#calendar').fullCalendar('refetchEvents')}, 3000);
-
 function addEventPopUP(calevent,event){
 	if ($('.bubblemain').length > 0) {
 	// exists.
@@ -276,3 +199,84 @@ function deleteEvent(eventId){
 	console.log("line 207: " + eventId);
 	window.location.href = "/delete_event/" + eventId;
 }
+
+if (window.location.pathname === '/') { 
+	$(document).ready(function() {
+		console.log("line 63");
+		// page is now ready, initialize the calendar...
+			//setInterval(function(){$('#calendar').fullCalendar('refetchEvents')}, 3000);
+		$("input").click(function() {
+				var calNames=[];
+				$.each($("input[name='calendars']:checked"), function(){            
+                		calNames.push($(this).val());
+            	});
+            	console.log(calNames.join(","));
+            	if (calNames.length != 0) {
+            		var url = '/get-cal-specific-list-json/' + calNames.join(",");
+            	} else {
+            		var url = '/get-list-json';
+            	}
+            	console.log(url)
+            	$('#calendar').fullCalendar('removeEvents');
+            	$('#calendar').fullCalendar('addEventSource', url);
+            	$('#calendar').fullCalendar('rerenderEvents');
+            	
+			});
+		$('#calendar').fullCalendar({
+		// put your options and callbacks here
+				header: {left: 'title month, agendaWeek', right: 'prev, next'},
+				// defaultView: 'basicWeek',
+				defaultView: 'agendaWeek',
+				eventSources: ['/get-list-json'],
+				dayClick: function() {
+					alert('a day has been clicked!');
+				},
+				eventClick: function(event, element, ev) {
+					console.log(JSON.stringify(event));
+					var elemId = event["id"];
+					addEventPopUP(event,element);
+					// window.location.href = "/check_event_privacy/" + elemId;
+				},
+				eventRender: function(event){
+					if(event.hasOwnProperty('ranges')){
+						return (event.ranges.filter(function(range){ // test event against all the ranges
+							return (event.start.isBefore(range.r_end) &&
+									event.end.isAfter(range.r_start));
+						}).length)>0; //if it isn't in one of the ranges, don't render it (by returning false)
+				}},
+
+	});
+		getList();
+		window.setInterval(getList, 5000); //set correctly
+	});
+}
+else if (window.location.pathname.slice(1, 5) === "edit") {
+	$(document).ready(function() {
+		$( "#id_datepicker" ).datepicker({
+			dateFormat:"yy-mm-dd",
+		});
+		$("#id_datepicker").on("change",function(){
+		var selected = $(this).val();
+		console.log(selected);
+		});
+
+		$( "#id_datepicker_st" ).datepicker({
+			dateFormat:"yy-mm-dd",
+		});
+		$("#id_datepicker_st").on("change",function(){
+		var selected = $(this).val();
+		console.log(selected);
+		});
+
+		$( "#id_datepicker_end" ).datepicker({
+			dateFormat:"yy-mm-dd",
+		});
+		$("#id_datepicker_end").on("change",function(){
+		var selected = $(this).val();
+		console.log(selected);
+		});
+	});
+} 
+
+//window.onload = refresh();
+

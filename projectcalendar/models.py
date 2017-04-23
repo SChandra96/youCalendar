@@ -3,6 +3,10 @@ from django.contrib.auth.models import User
 from django.db import models
 
 # Create your models here.
+
+class Calendar(models.Model):
+	name = models.CharField(max_length=20)
+	
 class Event(models.Model):
 	title = models.CharField(max_length=20)
 	startDate = models.CharField(max_length=10)
@@ -19,6 +23,7 @@ class Event(models.Model):
 	apptSlot = models.IntegerField(null=True)
 	apptCalendarUrl = models.CharField(max_length=100, null=True)
 	token = models.CharField(max_length=10)
+	calendar = models.ForeignKey(Calendar)
 
 class AppointmentSlot(models.Model):
 	token = models.CharField(max_length=10)
@@ -32,4 +37,6 @@ class AppointmentSlot(models.Model):
 class UserWithFields(models.Model):
 	user = models.OneToOneField(User, related_name='user')
 	events = models.ManyToManyField(Event)
+	calendar = models.ManyToManyField(Calendar)
+
 
