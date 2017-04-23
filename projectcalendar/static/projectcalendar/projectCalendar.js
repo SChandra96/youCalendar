@@ -57,6 +57,7 @@ function notify(events) {
 		}
 	} 	
 }
+
 function addEventPopUP(calevent,event){
 	if ($('.bubblemain').length > 0) {
 	// exists.

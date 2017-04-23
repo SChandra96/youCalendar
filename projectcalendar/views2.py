@@ -14,7 +14,6 @@ from django.contrib.auth.tokens import default_token_generator
 
 # Used to send mail from within Django
 from django.core.mail import send_mail
-import pytz
 import string
 import random 
 from datetime import datetime, timedelta
@@ -24,7 +23,7 @@ from datetime import datetime, timedelta
 def home(request):
 	context = getCalendarNames(request.user)
 	context['form'] = CreateEventForm()
-	return render(request, 'projectCalendar/index2.html', context)
+	return render(request, 'projectcalendar/index2.html', context)
 
 def createNewAppointmentSlots(event, token, startDate):
 	print "byyyy"
@@ -79,10 +78,10 @@ def addEvent(request):
 	context = getCalendarNames(request.user)
 	context['form'] = CreateEventForm()
 	if request.method == 'GET':
-		return render(request, 'projectCalendar/index2.html', context)
+		return render(request, 'projectcalendar/index2.html', context)
 	form = CreateEventForm(request.POST)
 	if not form.is_valid():
-		return render(request, 'projectCalendar/index2.html', context)
+		return render(request, 'projectcalendar/index2.html', context)
 	startDate = form.cleaned_data['datepicker']
 	startTime = request.POST['startTime']+":00"
 	endTime = request.POST['endTime'] + ":00"
@@ -127,7 +126,7 @@ def createCalendar(request):
 
 def seeAptCalendar(request, token):
 	if request.user.is_authenticated:
-		return render(request, 'projectCalendar/appointmentCalendar.html', {})
+		return render(request, 'projectcalendar/appointmentCalendar.html', {})
 	else:
 		return redirect('/login')
 
@@ -166,11 +165,11 @@ def editEvent(request, id):
 		context['endTime'] = eventObj.endTime[:-3]
 		context['location'] = eventObj.location
 		
-		return render(request, 'projectCalendar/editEvent.html', context)
+		return render(request, 'projectcalendar/editEvent.html', context)
 
 	form = EditEventForm(request.POST)
 	if not form.is_valid():
-		return render(request, 'projectCalendar/editEvent.html', context)
+		return render(request, 'projectcalendar/editEvent.html', context)
 
 	event = get_object_or_404(Event, id=int(id))
 
@@ -179,7 +178,7 @@ def editEvent(request, id):
 		if(event.endTime == ""):
 			print "line 63"
 			context['error'] = 'Event must have an end time before set repeat!'
-			return render(request, 'projectCalendar/editEvent.html', context)
+			return render(request, 'projectcalendar/editEvent.html', context)
 
 		rangeStartDate =  request.POST['datepicker_st']
 		rangeEndDate = request.POST['datepicker_end']
@@ -198,7 +197,7 @@ def editEvent(request, id):
 			print "range date is valid!"
 		else:
 			context['error'] = 'EndDate must be later than StartDate!'
-			return render(request, 'projectCalendar/editEvent.html', context)
+			return render(request, 'projectcalendar/editEvent.html', context)
 
 		event.save()
 		if(rangeStartDate != '' and rangeEndDate != '' and repeatDate != []):
@@ -211,7 +210,7 @@ def editEvent(request, id):
 				recreateAppointmentSlots(rangeStartDate, rangeEndDate, repeatDate, event)
 
 		context['message'] = 'Changes made to this event have been saved to our calendar'
-		return render(request, 'projectCalendar/editEvent.html', context)
+		return render(request, 'projectcalendar/editEvent.html', context)
 	
 
 	startDate = form.cleaned_data['datepicker']
@@ -239,7 +238,7 @@ def editEvent(request, id):
 				event.endTime = endTime + ":00"
 		else:
 			context['error'] = 'End Time must be later than Start Time!'
-			return render(request, 'projectCalendar/editEvent.html', context)
+			return render(request, 'projectcalendar/editEvent.html', context)
 
 	if (whenToNotify and notificationPref != ''):
 		event.whenToNotify = whenToNotify
@@ -261,7 +260,7 @@ def editEvent(request, id):
 			decUser = UserWithFields.objects.get(user=inviteUser)
 		except:
 			context['error'] = 'No user with email ID you entered exists'
-			return render(request, 'projectCalendar/editEvent.html', context)
+			return render(request, 'projectcalendar/editEvent.html', context)
 		
 		if ("privacy-read" in request.POST and "privacy-r&w" not in request.POST):
 			selectOne = True
@@ -295,7 +294,7 @@ def editEvent(request, id):
 		else:
 			context['error'] = "You must select the privacy level for the event. It must be either read only or read and write"
 	
-	return render(request, 'projectCalendar/editEvent.html', context)
+	return render(request, 'projectcalendar/editEvent.html', context)
 
 @transaction.atomic
 def acceptRead(request, eventTitle, userEmail, token):
@@ -309,7 +308,7 @@ def acceptRead(request, eventTitle, userEmail, token):
 
     decUser.events.add(event)
     decUser.save()
-    return render(request, 'projectCalendar/acceptedInvitation.html', {})
+    return render(request, 'projectcalendar/acceptedInvitation.html', {})
 
 @transaction.atomic
 def acceptRW(request, eventTitle, userEmail, token):
@@ -325,7 +324,7 @@ def acceptRW(request, eventTitle, userEmail, token):
     decUser.save()
     event.admins.add(user)
     event.save()
-    return render(request, 'projectCalendar/acceptedInvitation.html', {})
+    return render(request, 'projectcalendar/acceptedInvitation.html', {})
 
 def makeEventList(qs):
 	events = []
@@ -408,11 +407,6 @@ def get_appt_list_json(request, token):
 	events = makeAppointmentList(qs, "blue")
 	return HttpResponse(json.dumps(events), content_type='application/json')
 
-def get_timezone_list():
-	timezones = pytz.all_timezones
-	
-	return timezones
-
 @transaction.atomic
 def register(request):
 	context = {}
@@ -420,7 +414,7 @@ def register(request):
 	# Just display the registration form if this is a GET request.
 	if request.method == 'GET':
 		context['form'] = RegistrationForm()
-		return render(request, 'projectCalendar/register.html', context)
+		return render(request, 'projectcalendar/register.html', context)
 
 	# Creates a bound form from the request POST parameters and makes the 
 	# form available in the request context dictionary.
@@ -431,7 +425,7 @@ def register(request):
 	if not form.is_valid():
 		print 'commin'
 		context['message'] = 'Information input is invalid, please make sure that your username and email is unique.'
-		return render(request, 'projectCalendar/register.html', context)
+		return render(request, 'projectcalendar/register.html', context)
 
 	# At this point, the form data is valid.  Register and login the user.
 	new_user = User.objects.create_user(username=form.cleaned_data['username'], 
