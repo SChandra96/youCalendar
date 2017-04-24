@@ -97,6 +97,7 @@
 td{
   font-weight: bold;
   padding: 50px;
+  margin:20px;
 }
 nav {
   float: left;
@@ -126,4 +127,8 @@ body {
 p {
   text-align: center;
   font-size: 100%;
+}
+tr {
+  width: 50%;
+  margin: 20px;
 }

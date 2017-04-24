@@ -23,10 +23,12 @@ from datetime import datetime, timedelta
 def home(request):
 	context = getCalendarNames(request.user)
 	context['form'] = CreateEventForm()
+	error = request.session.pop('error', False)
+	if error:
+		context['error'] = error
 	return render(request, 'projectcalendar/index2.html', context)
 
 def createNewAppointmentSlots(event, token, startDate):
-	print "byyyy"
 	fmt = "%Y-%m-%d%H:%M:%S"
 	startTime = datetime.strptime(startDate + event.startTime, fmt)
 	endTime = datetime.strptime(startDate + event.endTime, fmt)
@@ -46,7 +48,6 @@ def createNewAppointmentSlots(event, token, startDate):
 
 def recreateAppointmentSlots(rangeStartDate, rangeEndDate, dateList, event):
 	AppointmentSlot.objects.all().filter(token=event.token).delete()
-	print "come on"
 	fmt = "%Y-%m-%d"
 	startDate = datetime.strptime(rangeStartDate, fmt)
 	endDate = datetime.strptime(rangeEndDate, fmt)
@@ -73,6 +74,16 @@ def getCalendarNames(user):
 		context['calNames'].append(calendar.name)
 	return context
 
+def validateEventDetails(startTime, endTime, isAppt, apptSlot):
+	fmt = "%H:%M:%S"
+	start = datetime.strptime(startTime, fmt)
+	end = datetime.strptime(endTime, fmt)
+	if end <= start:
+		return "End time of event must be after start time. Please try again"
+	if isAppt ^ apptSlot:
+		return "To create an appointment, you must set type of event to appointment and enter a slot duration. Try again"
+	return ""
+
 @login_required
 def addEvent(request):
 	context = getCalendarNames(request.user)
@@ -87,8 +98,13 @@ def addEvent(request):
 	endTime = request.POST['endTime'] + ":00"
 	isAppointment = "appointment" in request.POST and "appointmentSlot" in request.POST
 	calendarName = request.POST['calName']
-	print calendarName
 	calendar = Calendar.objects.all().get(name=calendarName)
+	error = validateEventDetails(startTime, endTime, "appointment" in request.POST,
+								"appointmentSlot" in request.POST)
+	if error != '':
+		request.session['error'] = error
+		return redirect('/')
+
 	new_event = Event(title=form.cleaned_data['title'],
 					  startDate=startDate,
 					  startTime=startTime,
