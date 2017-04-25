@@ -297,7 +297,7 @@ def editEvent(request, id):
 			else:
 				token = default_token_generator.make_token(inviteUser)
 				email_url = "http://%s%s" % (request.get_host(), reverse(urlArgName, args=(event.title, email, token)))
-				email_body = ("You've been invited to edit event " + event.title +
+				email_body = ("You've been invited to the event " + event.title +
 				 			 " Please click on the link below to be added to this event " + 
 		                  	  email_url)
 				print email_body

@@ -248,7 +248,7 @@ if (window.location.pathname === '/') {
 
 	});
 		getList();
-		window.setInterval(getList, 5000); //set correctly
+		window.setInterval(getList, 30*60000); //set correctly
 	});
 }
 else if (window.location.pathname.slice(1, 5) === "edit") {
