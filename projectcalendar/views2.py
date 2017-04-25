@@ -182,8 +182,9 @@ def editEvent(request, id):
 		context['location'] = eventObj.location
 		
 		return render(request, 'projectcalendar/editEvent.html', context)
-
+	context['form'] = EditEventForm()
 	form = EditEventForm(request.POST)
+
 	if not form.is_valid():
 		return render(request, 'projectcalendar/editEvent.html', context)
 

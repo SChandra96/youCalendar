@@ -73,12 +73,10 @@
                 <td > Notifications: </td>
                 <td id ="td-noti"> {{form.notifTime}} </td>
                 <td id = "td-noti-time">
-                <input id = "notifPref" list="notificationTime" name="notifPref">
-                  <datalist id="notificationTime">
-                    <option value="hours">
-                    <option value="minutes">
-                  </datalist>
-                  </input> 
+                <select id = "notifPref" list="notificationTime" name="notifPref">
+                  <option value="hours"> hours </option>
+                  <option value="minutes"> minutes </option>
+                </select> 
                 </td>
               </tr>
             </table>

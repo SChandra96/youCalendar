@@ -32,7 +32,7 @@ function notify(events) {
 						console.log(event.title)
 						console.log(todayEventStartMoment);
 						console.log(timeDiff);
-						if (timeDiff >= 0 && timeDiff <= 60) { //time difference between today's start time of evtmt and current time
+						if (timeDiff >= 0 && timeDiff <= event.whenToNotify) { //time difference between today's start time of evtmt and current time
 							var time = todayEventStartMoment.format("hh:mm");
 							time = time + ((todayEventStartMoment.hour()) >= 12 ? ' PM' : ' AM');
 							var notificationMessage = "Reminder: You have an event coming up today: " + event.title + " at " + time;
