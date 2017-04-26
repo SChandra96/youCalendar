@@ -119,6 +119,13 @@ tr{
 .bubble-fvalue{
   font-size: 14px;
 }
+.bubble-fvalue a{
+  display: block;
+  width: 336px;
+  overflow:hidden;  
+  text-overflow:ellipsis; 
+  white-space:nowrap; 
+}
 
 #popup-del-btn, #popup-edit-btn{
   width: 66px;

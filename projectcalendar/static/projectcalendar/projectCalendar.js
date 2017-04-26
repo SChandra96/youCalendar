@@ -126,7 +126,8 @@ function addEventPopUP(calevent,event){
 	if (calevent.isApptSlot == null) {
 		console.log(event);
 		 if (calevent.apptEvent) {
-			var apptUrl = '<div class = "bubble-fvalue">'
+			var apptUrl = '<div class = "bubble-fname"> Appointment URL: </div>'
+							+'<div class = "bubble-fvalue">'
 							+'<a href=' + calevent.apptURL + '>' + calevent.apptURL + '</a>' 
 							+'</div>';
 		}
