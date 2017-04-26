@@ -64,6 +64,9 @@ function addEventPopUP(calevent,event){
 		$('.bubblemain').remove();
 	}
 
+	var month_names_short =  ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
+		'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+	console.log(month_names_short[1]);
 	var x = event.clientX;
 	var y = event.clientY;
 	var xd = 160;
@@ -76,8 +79,20 @@ function addEventPopUP(calevent,event){
 					+'<div class = "bubble-fname"> Time </div>';
 					
 	var start_date = eventJson.start.substring(0,10);
+	var start_month = start_date.substring(5,7);
+	var start_day = start_date.substring(8,10);
+	console.log(start_day);
+	var s_mon = Number(start_month);
+	var s_mon_name = month_names_short[s_mon-1];
 	var start_time = eventJson.start.substring(11,16);
-	var start_str = start_date+" "+start_time;
+	var start_str = start_time;
+	if(Number(start_time.substring(0,2))>=12){
+		start_str += 'pm';
+	}
+	else{
+		start_str += 'am';
+	}
+	
 	if(eventJson.end == null){
 		contStr += '<div class = "bubble-fvalue">'
 					+start_str
@@ -86,9 +101,16 @@ function addEventPopUP(calevent,event){
 	else{
 		var end_date = eventJson.end.substring(0,10);
 		var end_time = eventJson.end.substring(11,16);
-		var end_str = end_date+" "+end_time;
-		contStr += '<div class = "bubble-fvalue">'
-					+start_str+' ~ '
+		var end_str = end_time;
+		if(Number(end_time.substring(0,2))>=12){
+			end_str += 'pm';
+		}
+		else{
+			end_str += 'am';
+		}
+		contStr += '<div class = "bubble-fvalue">'+s_mon_name+' '+start_day
+					+', '
+					+start_str+' - '
 					+end_str
 					+'</div>';
 	}
