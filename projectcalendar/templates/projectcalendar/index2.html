@@ -48,14 +48,14 @@
 			</div>
 		</header>
 		<div>
-			<nav>
+			<nav id = "side-nav">
 			<!-- Will be replaced by calendar names-->
 			   <form>
 			   		<table>
 			   			{% for calName in calNames %}
 			   			<tr>
 			   				<td> <input type="checkbox" name="calendars" value="{{calName}}"></input> </td>
-			   				<td> {{calName}} </td>
+			   				<td class = "td-calName"> {{calName}} </td>
 			   			</tr>
 			   			{% endfor %}
 			   		</table>
