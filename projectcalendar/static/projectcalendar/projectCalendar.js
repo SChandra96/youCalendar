@@ -134,14 +134,16 @@ function addEventPopUP(calevent,event){
 			var apptUrl = "";
 		}
 		var btnStr1 = '<div id = "div-popup-edit-btn">'
-					+'<button type="button" id = "popup-edit-btn" onclick = \
+					+'<button type="button" id = "popup-edit-btn" \
+					class = "btn btn-lg btn-primary btn-block" onclick = \
 					"jumpToEditPage('+eventId+')">'
 					+'Edit'
 					+'</button>'
 					+'</div>';
 
 		var btnStr2 = '<div id = "div-popup-del-btn">'
-						+'<button type="button" id = "popup-del-btn" onclick = \
+						+'<button type="button" id = "popup-del-btn" \
+						 class = "btn btn-lg btn-primary btn-block"  onclick = \
 						"deleteEvent('+eventId+')">'
 						+'Delete'
 						+'</button>'
