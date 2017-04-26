@@ -53,6 +53,12 @@ tr{
 }
 #logout-button{
   float: right;
+  padding-top: 8px;
+}
+#addEvent-btn{
+  width: 120px;
+  height: 40px;
+  padding-top: 8px;
 }
 .user-info{
   width: 120px;
