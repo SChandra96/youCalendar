@@ -9,7 +9,7 @@
   padding-left: 12px;
 }
 
-#add-event-close-btn{
+#add-event-close-btn, #add-cal-close-btn{
   width: 76px;
   height: 32px;
   font-size: 14px;
@@ -31,20 +31,28 @@ tr{
   border-color: #337ab7;
   
 }
-
-
-#addEvent-div{
-  width: 120px;
-  margin-left: 1010px;
+#addEvent-btn-div{
+  width: 980px;
+  height: 45px;
+  float: left;
+  
 }
+
 #addEvent-btn{
   width: 120px;
   height: 40px;
-  margin-left: 0px;
+  margin-left: 860px;
   margin-top: 2px;
   border-color: #337ab7;
+  padding-top: 8px;
   
-  
+}
+div.container{
+  height: 56px;
+}
+.blog-nav{
+  width: 100%;
+  padding-top: 5px;
 }
 #logout_form{
   height: 45px;
@@ -55,21 +63,16 @@ tr{
   float: right;
   padding-top: 8px;
 }
-#addEvent-btn{
-  width: 120px;
-  height: 40px;
-  padding-top: 8px;
-}
 .user-info{
   width: 120px;
   height: 45px;
   margin-right: 2px;
   float: right;
 }
-.createCalendar {
+./*createCalendar {
   background-color: #337ab7;
   color: white;
-}
+}*/
 #navigator{
   height: 45px;
   width: 5px;
@@ -143,6 +146,19 @@ tr{
   padding-top: 3px;
   padding-left: 10px;
 }
+
+#create-cal-btn{
+  width: 100px;
+  height: 50px;
+  font-size: 14px;
+  text-align: center;
+  margin-top: 10px;
+  margin-left: 0px;
+  padding-top: 3px;
+  padding-left: 10px;
+  white-space: normal;
+}
+
 td{
   font-weight: bold;
   padding: 50px;

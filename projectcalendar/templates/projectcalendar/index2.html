@@ -31,19 +31,19 @@
 	   		<div class="blog-masthead" id = "navigator">
 			<div class="container">
 				<nav class="blog-nav">
+					<div id = "addEvent-btn-div">
+						 <button id = "addEvent-btn" data-toggle="modal" data-target="#myModal" class="btn btn-lg btn-primary btn-block" > Add Event</button> 
+					</div>
+					<div class="user-info">
+					<form action="{% url 'logout' %}" method="get" id = "logout_form">
+						<button id = "logout-button" class="btn btn-lg btn-primary btn-block" type="submit">Logout</button>
+					</form>
+					</div>
 				</nav>
 			</div>  
 			</div>
 
-			<div class="user-info">
-					<form action="{% url 'logout' %}" method="get" id = "logout_form">
-						<button id = "logout-button" class="btn btn-lg btn-primary btn-block" type="submit">Logout</button>
-					</form>
-			</div>
-
-			<div class="user-info">
-				 <button id = "addEvent-btn" data-toggle="modal" data-target="#myModal" class="btn btn-lg btn-primary btn-block" > Add Event</button> 
-			</div>
+			
 
 			</div>
 		</header>
@@ -60,7 +60,7 @@
 			   			{% endfor %}
 			   		</table>
 			   </form>
-			  <button class="createCalendar" data-toggle="modal" data-target="#createCalendarModal"> Create new calendar </button> 
+			  <button id = "create-cal-btn"class="btn btn-lg btn-primary btn-block" data-toggle="modal" data-target="#createCalendarModal"> Create new calendar </button> 
 			</nav>
 			<article> 
 				{% if error %}
@@ -159,7 +159,7 @@
 		        </form>
 		      </div>
 		      <div class="modal-footer">
-		        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		        <button id = "add-cal-close-btn" type="button" class="btn btn-lg btn-primary btn-block" data-dismiss="modal">Close</button>
 		      </div>
 		    </div>
 
