@@ -17,7 +17,22 @@
   padding-left: 12px;
   margin-left: 490px;
 }
+#add-cal-sub-btn{
+  width: 76px;
+  height: 32px;
+  font-size: 14px;
+  text-align: center;
+  margin-right: 180px;
+  margin-top: -2px;
+  padding-top: 6px;
+  padding-left: 12px;
+  float: right;
 
+}
+
+#add-cal-input{
+  width: 200px;
+}
 tr{
   padding-bottom: 10px;
   height: 32px;
@@ -154,7 +169,7 @@ div.container{
   text-align: center;
   margin-top: 10px;
   margin-left: 0px;
-  padding-top: 3px;
+  padding-top: 5px;
   padding-left: 10px;
   white-space: normal;
 }
