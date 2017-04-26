@@ -79,11 +79,11 @@
 		  <div class="modal-content">
 		    <div class="modal-header">
 		      <button type="button" class="close" data-dismiss="modal">&times;</button>
-		      <h4 class="modal-title">Add event </h4>
+		      <h4 class="modal-title">Add Event </h4>
 		    </div>
 		    <div class="modal-body" >
 		      <form style="width:500px; height:500px" method="post"  action="{% url 'add_event' %}">
-	            <table>
+	            <table id = "add-event-table">
 	            	<tr>
 			            <td>{{ form.title.label_tag }}</td>
 			            <td>{{ form.title }}</td>
@@ -117,7 +117,7 @@
 			            </td>
 			        </tr>
 			        <tr>
-			         	<td> Offer as </td>
+			         	<td> Offer as: </td>
 			            <td> 
 			            	<input name="appointmentSlot" type="radio"> 
 			            	Slots of  <input type="number" name="slotTime" min="15" max="60"> minutes 
@@ -126,7 +126,7 @@
 			        </tr>
 	        	</table>
 	        	{% csrf_token %}
-	        	<button> Submit </button>
+	        	<button id = "add-event-sub-btn"class = "btn btn-lg btn-primary btn-block"> Submit </button>
 	        </form>
 	        <script> 
 	        	$('#id_datepicker').datepicker({
@@ -135,7 +135,7 @@
 	        </script>
 		    </div>
 		    <div class="modal-footer">
-		      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		      <button id = "add-event-close-btn"type="button" class="btn btn-lg btn-primary btn-block" data-dismiss="modal">Close</button>
 		    </div>
 		  </div>
       
