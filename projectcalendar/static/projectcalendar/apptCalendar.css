@@ -1,0 +1,25 @@
+#yes-btn{
+  width: 76px;
+  height: 32px;
+  font-size: 14px;
+  padding-top: 6px;
+  padding-left: 12px;
+  margin-left: 405px;
+  float: left;
+}
+#no-btn{
+  width: 76px;
+  height: 32px;
+  font-size: 14px;
+  padding-top: 6px;
+  padding-left: 12px;
+  margin-left: 490px;
+}
+#close-btn{
+  width: 76px;
+  height: 32px;
+  font-size: 14px;
+  padding-top: 6px;
+  padding-left: 12px;
+  margin-left: 490px;
+}

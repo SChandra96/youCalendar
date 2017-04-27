@@ -4,6 +4,7 @@
 	    <meta charset="utf-8">
 	    {% load staticfiles %}
 	    <link href= "{% static 'projectcalendar/fullcalendar.css' %}" rel='stylesheet'/>
+	     <link href= "{% static 'projectcalendar/apptCalendar.css' %}" rel='stylesheet'/>
 	    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	    <link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css"
         rel = "stylesheet">
@@ -38,12 +39,12 @@
 		      </div>
 		      <div class="modal-body"> 
 		        <p> Are you sure you want to book this appointment? </p>
-	        	<button onclick="bookAppointment()"> Yes </button>
-	        	<button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+	        	<button id = "yes-btn" onclick="bookAppointment()" class = "btn btn-lg btn-primary btn-block"> Yes </button>
+	        	<button id = "no-btn" type="button" class="btn btn-lg btn-primary btn-block" data-dismiss="modal">No</button>
 		        </form>
 		      </div>
 		      <div class="modal-footer">
-		        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		        <button id = "close-btn" type="button" class="btn btn-lg btn-primary btn-block" data-dismiss="modal">Close</button>
 		      </div>
 		    </div>
 

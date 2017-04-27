@@ -1,3 +1,43 @@
+#add-event-sub-btn{
+  width: 76px;
+  height: 32px;
+  font-size: 14px;
+  text-align: center;
+  margin-left: 0px;
+  margin-top: 10px;
+  padding-top: 6px;
+  padding-left: 12px;
+}
+
+#add-event-close-btn, #add-cal-close-btn{
+  width: 76px;
+  height: 32px;
+  font-size: 14px;
+  padding-top: 6px;
+  padding-left: 12px;
+  margin-left: 490px;
+}
+#add-cal-sub-btn{
+  width: 76px;
+  height: 32px;
+  font-size: 14px;
+  text-align: center;
+  margin-right: 180px;
+  margin-top: -2px;
+  padding-top: 6px;
+  padding-left: 12px;
+  float: right;
+
+}
+
+#add-cal-input{
+  width: 200px;
+}
+tr{
+  padding-bottom: 10px;
+  height: 32px;
+}
+
 #logout-button{
   width: 110px;
   height: 40px;
@@ -6,20 +46,29 @@
   border-color: #337ab7;
   
 }
-
-
-#addEvent-div{
-  width: 120px;
-  margin-left: 1010px;
+#addEvent-btn-div{
+  width: 980px;
+  height: 45px;
+  float: left;
+  
 }
+
 #addEvent-btn{
   width: 120px;
   height: 40px;
-  margin-left: 0px;
+  margin-left: 860px;
   margin-top: 2px;
   border-color: #337ab7;
+  padding-top: 8px;
   
-  
+}
+div.container{
+  height: 56px;
+}
+.blog-nav{
+  width: 100%;
+  margin-left: 70px;
+  padding-top: 5px;
 }
 #logout_form{
   height: 45px;
@@ -28,6 +77,7 @@
 }
 #logout-button{
   float: right;
+  padding-top: 8px;
 }
 .user-info{
   width: 120px;
@@ -35,10 +85,10 @@
   margin-right: 2px;
   float: right;
 }
-.createCalendar {
+./*createCalendar {
   background-color: #337ab7;
   color: white;
-}
+}*/
 #navigator{
   height: 45px;
   width: 5px;
@@ -62,8 +112,8 @@
 }
 
 .bubblemain{
-  width: 350px;
-  height: 200px;
+  width: 360px;
+  height: 220px;
   padding: 10px;
   outline: none;
   position:absolute;
@@ -77,8 +127,8 @@
 
 #div-popup-edit-btn, #div-popup-del-btn{
   float: right;
-  margin-top: 20px;
-  margin-right: 10px;
+  margin-top: 36px;
+  margin-right: 5px;
 }
 
 .bubble-title{
@@ -94,16 +144,55 @@
 .bubble-fvalue{
   font-size: 14px;
 }
+.bubble-fvalue a{
+  display: block;
+  width: 336px;
+  overflow:hidden;  
+  text-overflow:ellipsis; 
+  white-space:nowrap; 
+}
+
+#popup-del-btn, #popup-edit-btn{
+  width: 66px;
+  height: 30px;
+  font-size: 14px;
+  text-align: center;
+  margin-top: 10px;
+  margin-left: 0px;
+  padding-top: 3px;
+  padding-left: 10px;
+}
+
+#create-cal-btn{
+  width: 100px;
+  height: 50px;
+  font-size: 14px;
+  text-align: center;
+  margin-top: 10px;
+  margin-left: 0px;
+  padding-top: 5px;
+  padding-left: 10px;
+  white-space: normal;
+}
+
 td{
   font-weight: bold;
   padding: 50px;
   margin:20px;
+}
+
+.td-calName{
+  padding-left: 5px;
 }
 nav {
   float: left;
   width: 10%;
   margin: 0;
   padding: 1em;
+}
+
+#side-nav{
+  margin-left: 5px;
 }
   
 article {

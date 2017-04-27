@@ -189,7 +189,12 @@ def editEvent(request, id):
 		return render(request, 'projectcalendar/editEvent.html', context)
 
 	event = get_object_or_404(Event, id=int(id))
-
+	eventObj = get_object_or_404(Event, id=int(id))
+	context['form'] = EditEventForm({'title':eventObj.title, 
+		'datepicker': eventObj.startDate })
+	context['startTime'] = eventObj.startTime[:-3]
+	context['endTime'] = eventObj.endTime[:-3]
+	context['location'] = eventObj.location
 	#if submitted form is repeat form:
 	if 'repeat-form-flag' in request.POST:
 		if(event.endTime == ""):
@@ -255,6 +260,7 @@ def editEvent(request, id):
 				event.endTime = endTime + ":00"
 		else:
 			context['error'] = 'End Time must be later than Start Time!'
+
 			return render(request, 'projectcalendar/editEvent.html', context)
 
 	if (whenToNotify and notificationPref != ''):
@@ -311,6 +317,13 @@ def editEvent(request, id):
 		else:
 			context['error'] = "You must select the privacy level for the event. It must be either read only or read and write"
 	
+	eventObj = get_object_or_404(Event, id=int(id))
+	context['form'] = EditEventForm({'title':eventObj.title, 
+		'datepicker': eventObj.startDate })
+	context['startTime'] = eventObj.startTime[:-3]
+	context['endTime'] = eventObj.endTime[:-3]
+	context['location'] = eventObj.location
+
 	return render(request, 'projectcalendar/editEvent.html', context)
 
 @transaction.atomic

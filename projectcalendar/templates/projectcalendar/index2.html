@@ -31,36 +31,36 @@
 	   		<div class="blog-masthead" id = "navigator">
 			<div class="container">
 				<nav class="blog-nav">
+					<div id = "addEvent-btn-div">
+						 <button id = "addEvent-btn" data-toggle="modal" data-target="#myModal" class="btn btn-lg btn-primary btn-block" > Add Event</button> 
+					</div>
+					<div class="user-info">
+					<form action="{% url 'logout' %}" method="get" id = "logout_form">
+						<button id = "logout-button" class="btn btn-lg btn-primary btn-block" type="submit">Logout</button>
+					</form>
+					</div>
 				</nav>
 			</div>  
 			</div>
 
-			<div class="user-info">
-					<form action="{% url 'logout' %}" method="get" id = "logout_form">
-						<button id = "logout-button" class="btn btn-lg btn-primary btn-block" type="submit">Logout</button>
-					</form>
-			</div>
-
-			<div class="user-info">
-				 <button data-toggle="modal" data-target="#myModal" class="btn btn-lg btn-primary btn-block" > Add Event</button> 
-			</div>
+			
 
 			</div>
 		</header>
 		<div>
-			<nav>
+			<nav id = "side-nav">
 			<!-- Will be replaced by calendar names-->
 			   <form>
 			   		<table>
 			   			{% for calName in calNames %}
 			   			<tr>
 			   				<td> <input type="checkbox" name="calendars" value="{{calName}}"></input> </td>
-			   				<td> {{calName}} </td>
+			   				<td class = "td-calName"> {{calName}} </td>
 			   			</tr>
 			   			{% endfor %}
 			   		</table>
 			   </form>
-			  <button class="createCalendar" data-toggle="modal" data-target="#createCalendarModal"> Create new calendar </button> 
+			  <button id = "create-cal-btn"class="btn btn-lg btn-primary btn-block" data-toggle="modal" data-target="#createCalendarModal"> Create new calendar </button> 
 			</nav>
 			<article> 
 				{% if error %}
@@ -79,11 +79,11 @@
 		  <div class="modal-content">
 		    <div class="modal-header">
 		      <button type="button" class="close" data-dismiss="modal">&times;</button>
-		      <h4 class="modal-title">Add event </h4>
+		      <h4 class="modal-title">Add Event </h4>
 		    </div>
 		    <div class="modal-body" >
 		      <form style="width:500px; height:500px" method="post"  action="{% url 'add_event' %}">
-	            <table>
+	            <table id = "add-event-table">
 	            	<tr>
 			            <td>{{ form.title.label_tag }}</td>
 			            <td>{{ form.title }}</td>
@@ -117,7 +117,7 @@
 			            </td>
 			        </tr>
 			        <tr>
-			         	<td> Offer as </td>
+			         	<td> Offer as: </td>
 			            <td> 
 			            	<input name="appointmentSlot" type="radio"> 
 			            	Slots of  <input type="number" name="slotTime" min="15" max="60"> minutes 
@@ -126,7 +126,7 @@
 			        </tr>
 	        	</table>
 	        	{% csrf_token %}
-	        	<button> Submit </button>
+	        	<button id = "add-event-sub-btn"class = "btn btn-lg btn-primary btn-block"> Submit </button>
 	        </form>
 	        <script> 
 	        	$('#id_datepicker').datepicker({
@@ -135,7 +135,7 @@
 	        </script>
 		    </div>
 		    <div class="modal-footer">
-		      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		      <button id = "add-event-close-btn"type="button" class="btn btn-lg btn-primary btn-block" data-dismiss="modal">Close</button>
 		    </div>
 		  </div>
       
@@ -153,13 +153,13 @@
 		      </div>
 		      <div class="modal-body">
 		        <form method="post"  action="{% url 'create_calendar' %}">
-		        	Calendar Name: <input type="text" name="calendarName" required> </input>
+		        	Calendar Name: <input id = "add-cal-input" type="text" name="calendarName" required> </input>
 		        	{% csrf_token %}
-	        		<button> Submit </button>
+	        		<button id = "add-cal-sub-btn" class = "btn btn-lg btn-primary btn-block"> Submit </button>
 		        </form>
 		      </div>
 		      <div class="modal-footer">
-		        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		        <button id = "add-cal-close-btn" type="button" class="btn btn-lg btn-primary btn-block" data-dismiss="modal">Close</button>
 		      </div>
 		    </div>
 
