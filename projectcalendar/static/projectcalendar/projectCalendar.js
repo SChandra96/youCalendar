@@ -45,7 +45,7 @@ function notify(events) {
 			} else {
 				var startMoment = moment(event.start + "-04:00");
 				var timeDiff = startMoment.diff(curDate, event.notificationPref);
-				if (timeDiff >= 0 && timeDiff <= 60) { 
+				if (timeDiff >= 0 && timeDiff <= event.whenToNotify) { 
 					var time = startMoment.format("hh:mm");
 					time = time + ((startMoment.hour()) >= 12 ? ' PM' : ' AM');
 					var notificationMessage = "Reminder: You have an event coming up today: " + event.title + " at " + time;
