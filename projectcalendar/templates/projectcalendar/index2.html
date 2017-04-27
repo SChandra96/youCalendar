@@ -54,7 +54,7 @@
 			   		<table>
 			   			{% for calName in calNames %}
 			   			<tr>
-			   				<td> <input type="checkbox" name="calendars" value="{{calName}}"></input> </td>
+			   				<td> <input id="calnames" type="checkbox" name="calendars" value="{{calName}}"></input> </td>
 			   				<td class = "td-calName"> {{calName}} </td>
 			   			</tr>
 			   			{% endfor %}
@@ -113,13 +113,13 @@
 			        <tr>
 			         	<td> Type: </td>
 			            <td> 
-			            	<input name="appointment" type="radio"> Appointment </input>
+			            	<input name="appointment" type="checkbox"> Appointment </input>
 			            </td>
 			        </tr>
 			        <tr>
 			         	<td> Offer as: </td>
 			            <td> 
-			            	<input name="appointmentSlot" type="radio"> 
+			            	<input name="appointmentSlot" type="checkbox"> 
 			            	Slots of  <input type="number" name="slotTime" min="15" max="60"> minutes 
 			            	</input>
 			            </td>
