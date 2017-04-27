@@ -66,13 +66,13 @@ tr {
 }
 #save-loc-btn{
     float: right;
-    margin-right: 12px;
+    margin-right: 10px;
     margin-top: 10px;
-    width: 110px;
+    width: 160px;
     height: 32px;
     font-size: 14px;
     padding-top: 6px;
-    padding-left: 10px;
+    padding-left: 8px;
 }
 #repeat-sub-btn{
   width: 76px;
