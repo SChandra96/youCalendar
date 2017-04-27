@@ -392,11 +392,11 @@ def makeEventList(qs):
 		events.append(event_obj)
 	return events
 
-def makeAppointmentList(qs, color):
+def makeAppointmentList(qs, color, adminView):
 	appointments = []
 	for appointment in qs:
 		appointment_obj = {'title' : appointment.event.title, 'start': appointment.startTime, 'end': appointment.endTime,
-				'id': appointment.id, 'isBooked': appointment.isBooked, 'color': color, 
+				'id': appointment.id, 'isBooked': appointment.isBooked or adminView, 'color': color, 
 				'isApptSlot': True}
 		if appointment.isBooked:
 			appointment_obj['color'] = 'green'
@@ -417,7 +417,7 @@ def get_cal_specific_evtList(request, calNames):
 		apptEvents = qs.filter(isAppointment=True)
 		for apptEvent in apptEvents:
 			qs3 = AppointmentSlot.objects.all().filter(event=apptEvent)
-			myAppointmentSlots += makeAppointmentList(qs3, "grey")
+			myAppointmentSlots += makeAppointmentList(qs3, "grey", False)
 	events = calEvents + myAppointmentSlots
 	return HttpResponse(json.dumps(events), content_type='application/json')
 
@@ -428,13 +428,14 @@ def get_list_json(request):
 	apptEvents = qs.filter(isAppointment=True)
 	for apptEvent in apptEvents:
 		qs3 = AppointmentSlot.objects.all().filter(event=apptEvent)
-		myAppointmentSlots += makeAppointmentList(qs3, "grey")
-	events = makeEventList(qs) + makeAppointmentList(qs2, "blue") + myAppointmentSlots
+		myAppointmentSlots += makeAppointmentList(qs3, "grey", False)
+	events = makeEventList(qs) + makeAppointmentList(qs2, "blue", False) + myAppointmentSlots
 	return HttpResponse(json.dumps(events), content_type='application/json')
 
 def get_appt_list_json(request, token):
 	qs = AppointmentSlot.objects.all().filter(token=token)
-	events = makeAppointmentList(qs, "blue")
+	adminView = not (qs.filter(user=request.user))
+	events = makeAppointmentList(qs, "blue", adminView)
 	return HttpResponse(json.dumps(events), content_type='application/json')
 
 @transaction.atomic
