@@ -231,7 +231,7 @@ if (window.location.pathname === '/') {
 		console.log("line 63");
 		// page is now ready, initialize the calendar...
 			//setInterval(function(){$('#calendar').fullCalendar('refetchEvents')}, 3000);
-		$("#calnames").click(function() {
+		$("input[name='calendars']").click(function() {
 				var calNames=[];
 				$.each($("input[name='calendars']:checked"), function(){            
                 		calNames.push($(this).val());

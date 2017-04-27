@@ -6,6 +6,17 @@ from models import *
 class CreateEventForm(forms.Form):
 	title = forms.CharField(max_length=20)
 	datepicker  = forms.CharField(max_length=20)
+	def clean(self):
+		# Confirms that the username is not already present in the
+		# User model database.
+		cleaned_data = super(CreateEventForm, self).clean()
+		title = self.cleaned_data.get('title')
+		if Event.objects.filter(title__exact=title):
+			raise forms.ValidationError("Please create an event with a unique title")
+
+		# We must return the cleaned data we got from the cleaned_data
+		# dictionary
+		return cleaned_data
 	
 class EditEventForm(forms.Form):
 	title = forms.CharField(max_length=20, required=False)

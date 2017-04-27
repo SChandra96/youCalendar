@@ -34,6 +34,7 @@ def createNewAppointmentSlots(event, token, startDate):
 	endTime = datetime.strptime(startDate + event.endTime, fmt)
 	slotDuration= event.apptSlot
 	numberOfSlots = ((endTime-startTime).seconds/60)/slotDuration
+	print numberOfSlots
 	for i in xrange(1, numberOfSlots+1):
 		apptStartTime = (startTime + timedelta(minutes=slotDuration*(i-1))).time()
 		apptStartTimeDB = startDate + "T" + apptStartTime.strftime("%H:%M:%S")
@@ -92,13 +93,14 @@ def addEvent(request):
 		return render(request, 'projectcalendar/index2.html', context)
 	form = CreateEventForm(request.POST)
 	if not form.is_valid():
-		return render(request, 'projectcalendar/index2.html', context)
+		return redirect('/')
 	startDate = form.cleaned_data['datepicker']
 	startTime = request.POST['startTime']+":00"
 	endTime = request.POST['endTime'] + ":00"
 	isAppointment = "appointment" in request.POST and "appointmentSlot" in request.POST
 	calendarName = request.POST['calName']
-	calendar = Calendar.objects.all().get(name=calendarName)
+	decUser = UserWithFields.objects.get(user=request.user)
+	calendar = decUser.calendar.get(name=calendarName)
 	error = validateEventDetails(startTime, endTime, "appointment" in request.POST,
 								"appointmentSlot" in request.POST)
 	if error != '':
@@ -304,14 +306,14 @@ def editEvent(request, id):
 				token = default_token_generator.make_token(inviteUser)
 				email_url = "http://%s%s" % (request.get_host(), reverse(urlArgName, args=(event.title, email, token)))
 				email_body = ("You've been invited to the event " + event.title +
-				 			 " Please click on the link below to be added to this event " + 
-		                  	  email_url)
+							 " Please click on the link below to be added to this event " + 
+							  email_url)
 				print email_body
 				send_mail(
 						subject="Being added to an event",
-					  	message= email_body,
-					  	from_email="shikhaac@andrew.cmu.edu",
-				  		recipient_list=[email])
+						message= email_body,
+						from_email="shikhaac@andrew.cmu.edu",
+						recipient_list=[email])
 				context['message'] += 'User has been invited to event ' + event.title + '.'
 	
 		else:
@@ -328,33 +330,39 @@ def editEvent(request, id):
 
 @transaction.atomic
 def acceptRead(request, eventTitle, userEmail, token):
-    user = get_object_or_404(User, email=userEmail)
-    decUser = UserWithFields.objects.get(user=user)
-    event = get_object_or_404(Event, title=eventTitle)
+	if not request.user.is_authenticated:
+		user = get_object_or_404(User, email=userEmail)
+		decUser = UserWithFields.objects.get(user=user)
+		event = get_object_or_404(Event, title=eventTitle)
+		print  eventTitle, userEmail, token
+		# Send 404 error if token is invalid
+		if not default_token_generator.check_token(user, token):
+			raise Http404
 
-    # Send 404 error if token is invalid
-    if not default_token_generator.check_token(user, token):
-        raise Http404
-
-    decUser.events.add(event)
-    decUser.save()
-    return render(request, 'projectcalendar/acceptedInvitation.html', {})
+		decUser.events.add(event)
+		decUser.save()
+	 
+		return render(request, 'projectcalendar/acceptedInvitation.html', {})
+	else:
+		return redirect('/logout')
 
 @transaction.atomic
 def acceptRW(request, eventTitle, userEmail, token):
-    user = get_object_or_404(User, email=userEmail)
-    decUser = UserWithFields.objects.get(user=user)
-    event = get_object_or_404(Event, title=eventTitle)
+	user = get_object_or_404(User, email=userEmail)
+	decUser = UserWithFields.objects.get(user=user)
+	event = get_object_or_404(Event, title=eventTitle)
 
-    # Send 404 error if token is invalid
-    if not default_token_generator.check_token(user, token):
-        raise Http404
+	# Send 404 error if token is invalid
+	if not default_token_generator.check_token(user, token):
+		raise Http404
 
-    decUser.events.add(event)
-    decUser.save()
-    event.admins.add(user)
-    event.save()
-    return render(request, 'projectcalendar/acceptedInvitation.html', {})
+	decUser.events.add(event)
+	decUser.save()
+	event.admins.add(user)
+	event.save()
+	if request.user.is_authenticated:
+		return redirect('/')
+	return render(request, 'projectcalendar/acceptedInvitation.html', {})
 
 def makeEventList(qs):
 	events = []
@@ -382,7 +390,7 @@ def makeEventList(qs):
 			'id': event.id,}
 		if event.notificationPref and event.whenToNotify:
 			event_obj['whenToNotify'] = event.whenToNotify
-		 	event_obj['notificationPref'] = event.notificationPref
+			event_obj['notificationPref'] = event.notificationPref
 		if event.location:
 			event_obj['location'] = event.location
 		if event.isAppointment: 
@@ -408,10 +416,11 @@ def get_cal_specific_evtList(request, calNames):
 	calendarNames = calNames.split(",")
 	calEvents = []
 	myAppointmentSlots = []
-	userEventsQS = UserWithFields.objects.get(user=request.user).events.all()
+	decuser = UserWithFields.objects.get(user=request.user)
+	userEventsQS = decuser.events.all()
 	#get all events on calendars owned by user.
 	for calName in calendarNames:
-		calendar = Calendar.objects.all().get(name=calName)
+		calendar = decuser.calendar.get(name=calName)
 		qs = userEventsQS.filter(calendar=calendar)
 		calEvents+= makeEventList(qs)
 		apptEvents = qs.filter(isAppointment=True)
