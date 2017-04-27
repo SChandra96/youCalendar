@@ -46,17 +46,23 @@ tr{
   border-color: #337ab7;
   
 }
+#title-div{
+  float: left;
+  margin-left: 10px;
+  margin-top:-15px;
+}
 #addEvent-btn-div{
-  width: 980px;
+  width: 120px;
   height: 45px;
   float: left;
+  margin-left: 550px;
   
 }
 
 #addEvent-btn{
   width: 120px;
   height: 40px;
-  margin-left: 860px;
+  margin-left: 0px;
   margin-top: 2px;
   border-color: #337ab7;
   padding-top: 8px;
@@ -67,7 +73,7 @@ div.container{
 }
 .blog-nav{
   width: 100%;
-  margin-left: 70px;
+  margin-left: 80px;
   padding-top: 5px;
 }
 #logout_form{
