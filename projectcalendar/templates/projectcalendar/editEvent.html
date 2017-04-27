@@ -124,12 +124,12 @@
                   </tr>
                 </table>
                 {% csrf_token %}
-                <button> Submit </button>
+                <button id = "repeat-sub-btn" class = "btn btn-lg btn-primary btn-block"> Submit </button>
               </form>
             <div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal" onclick = 'unCheckRepeat()'>Close</button>
+            <button type="button" id = "repeat-close-btn" class = "btn btn-lg btn-primary btn-block" data-dismiss="modal" onclick = 'unCheckRepeat()'>Close</button>
           </div>
           </div>
         </div>

@@ -74,6 +74,26 @@ tr {
     padding-top: 6px;
     padding-left: 10px;
 }
+#repeat-sub-btn{
+  width: 76px;
+  height: 32px;
+  font-size: 14px;
+  text-align: center;
+  padding-top: 6px;
+  padding-left: 12px;
+  margin-bottom: 8px;
+  margin-top: 5px;
+  
+}
+#repeat-close-btn{
+  width: 76px;
+  height: 32px;
+  font-size: 14px;
+  padding-top: 6px;
+  padding-left: 12px;
+  float: right;
+  margin-right: -10px;
+}
 #td-noti{
     width: 200px;
    /* margin-right: -100px;*/
