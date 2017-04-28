@@ -442,8 +442,12 @@ def get_list_json(request):
 	return HttpResponse(json.dumps(events), content_type='application/json')
 
 def get_appt_list_json(request, token):
+	print request.user
 	qs = AppointmentSlot.objects.all().filter(token=token)
-	adminView = not (qs.filter(user=request.user))
+	corrospondingEvent = Event.objects.all().get(token=token)
+	decUser = UserWithFields.objects.all().get(user=request.user)
+	print corrospondingEvent.title, decUser.events.all()
+	adminView = (corrospondingEvent in decUser.events.all())
 	events = makeAppointmentList(qs, "blue", adminView)
 	return HttpResponse(json.dumps(events), content_type='application/json')
 
