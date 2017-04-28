@@ -200,6 +200,12 @@ nav {
 #side-nav{
   margin-left: 5px;
 }
+
+#error-p{
+  color: red;
+  font-size: large;
+  font-weight: bold;
+}
   
 article {
   margin-left: 170px;
