@@ -39,4 +39,11 @@ class UserWithFields(models.Model):
 	events = models.ManyToManyField(Event)
 	calendar = models.ManyToManyField(Calendar)
 
+class EM_Token(models.Model):
+    em_event = models.ForeignKey('Event')
+    em_user = models.ForeignKey(User, related_name='invitee')
+    em_token = models.CharField(max_length = 100)
+    class Meta:
+        unique_together = (("em_event", "em_user"),)
+
 
