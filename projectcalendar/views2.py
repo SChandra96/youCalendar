@@ -477,8 +477,8 @@ def get_appt_list_json(request, token):
 	qs = AppointmentSlot.objects.all().filter(token=token)
 	corrospondingEvent = Event.objects.all().get(token=token)
 	decUser = UserWithFields.objects.all().get(user=request.user)
-	print corrospondingEvent.title, decUser.events.all()
-	adminView = (corrospondingEvent in decUser.events.all())
+	print request.user, corrospondingEvent.admins.all()
+	adminView = request.user in corrospondingEvent.admins.all()
 	events = makeAppointmentList(qs, "blue", adminView)
 	return HttpResponse(json.dumps(events), content_type='application/json')
 

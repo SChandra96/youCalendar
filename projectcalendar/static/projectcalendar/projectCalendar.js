@@ -232,6 +232,13 @@ if (window.location.pathname === '/') {
 		console.log("line 63");
 		// page is now ready, initialize the calendar...
 			//setInterval(function(){$('#calendar').fullCalendar('refetchEvents')}, 3000);
+		$(document).on('click', '.fc-month-button', function(){
+            	console.log("in month view");
+            	$('#calendar').fullCalendar('rerenderEvents');
+		});
+		$(document).on('click', '.fc-agendaWeek-button ', function() {
+            	$('#calendar').fullCalendar('rerenderEvents');
+		})
 		$("input[name='calendars']").click(function() {
 				var calNames=[];
 				$.each($("input[name='calendars']:checked"), function(){            
@@ -244,7 +251,7 @@ if (window.location.pathname === '/') {
             		var url = '/get-list-json';
             	}
             	console.log(url)
-            	$('#calendar').fullCalendar('removeEvents');
+            	$('#calendar').fullCalendar('removeEventSources');
             	$('#calendar').fullCalendar('addEventSource', url);
             	$('#calendar').fullCalendar('rerenderEvents');
             	
@@ -255,9 +262,6 @@ if (window.location.pathname === '/') {
 				// defaultView: 'basicWeek',
 				defaultView: 'agendaWeek',
 				eventSources: ['/get-list-json'],
-				dayClick: function() {
-					alert('a day has been clicked!');
-				},
 				eventClick: function(event, element, ev) {
 					console.log(JSON.stringify(event));
 					var elemId = event["id"];
