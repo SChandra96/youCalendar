@@ -62,3 +62,8 @@ a {
 a:hover {
      background-color:lightblue;
 }
+
+#p-error{
+    margin-left: 250px;
+    font-size: 18px;
+}
