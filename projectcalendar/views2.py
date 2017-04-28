@@ -183,6 +183,7 @@ def deleteEvent(request,id):
 		event.delete();
 		return redirect('/')
 	else:
+		request.session['error'] = "Sorry you don't have the privilege to delete event"
 		return redirect('/')
 	
 
