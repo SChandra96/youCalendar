@@ -98,7 +98,7 @@ def addEvent(request):
 	form = CreateEventForm(request.POST)
 	if not form.is_valid():
 		return redirect('/')
-		
+
 	decUser = UserWithFields.objects.get(user=request.user)
 	if 'calName' in request.POST:	
 		calendarName = request.POST['calName']
@@ -121,6 +121,9 @@ def addEvent(request):
 					  endTime=endTime, isAppointment=isAppointment, calendar=calendar)
 	new_event.save()
 	if isAppointment:
+		if not "slotTime" in request.POST:
+			request.session['error'] = "You must enter a slot duration to create an appointment"
+			return redirect('/')
 		new_event.apptSlot = int(request.POST["slotTime"])
 		token = ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(10))
 		new_event.token = token
@@ -143,6 +146,9 @@ def createCalendar(request):
 	if request.method == 'POST':
 		name = request.POST['calendarName']
 		decUser = get_object_or_404(UserWithFields.objects, user=request.user)
+		if len(decUser.calendar.all().filter(name=name)) > 0:
+			request.session['error'] = 'Calendar names must be distinct. Please try again'
+			return redirect('/')
 		new_calendar = Calendar(name=name)
 		new_calendar.save()
 		decUser.calendar.add(new_calendar)

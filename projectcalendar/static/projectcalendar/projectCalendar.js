@@ -28,7 +28,7 @@ function notify(events) {
 					if ((event.dow).indexOf(currdow) !== -1) { //if today is one of the days on which event will happen
 						var todayEventStartMoment = moment(curMoment.format('YYYY-MM-DD') + 'T' + event.start+"-04:00");
 						//var timeDiff = moment.duration(todayEventStartMoment.diff(curDate)).minutes();
-						var timeDiff = todayEventStartMoment.diff(curDate, event.notificationPref);
+						var timeDiff = todayEventStartMoment.diff(curDate, event.notificationPref, true);
 						console.log(event.title)
 						console.log(todayEventStartMoment);
 						console.log(timeDiff);
@@ -44,7 +44,8 @@ function notify(events) {
 				}	
 			} else {
 				var startMoment = moment(event.start + "-04:00");
-				var timeDiff = startMoment.diff(curDate, event.notificationPref);
+				var timeDiff = startMoment.diff(curDate, event.notificationPref, true);
+				console.log(timeDiff);
 				if (timeDiff >= 0 && timeDiff <= event.whenToNotify) { 
 					var time = startMoment.format("hh:mm");
 					time = time + ((startMoment.hour()) >= 12 ? ' PM' : ' AM');
