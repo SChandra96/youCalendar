@@ -37,3 +37,8 @@ body {
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
 }
+.message{
+  color: red;
+  padding-left: 50px;
+  margin-left: 70px;
+}
