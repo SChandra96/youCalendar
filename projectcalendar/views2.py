@@ -84,7 +84,7 @@ def validateEventDetails(startTime, endTime, isAppt, apptSlot, eventTitle, decor
 		return "End time of event must be after start time. Please try again"
 	if isAppt ^ apptSlot:
 		return "To create an appointment, you must set type of event to appointment and enter a slot duration. Try again"
-	if not (isAppt ^ apptSlot):
+	if (isAppt and apptSlot):
 		if slotTime == '':
 			return "Please enter a slot duration between 15-60 minutes to create an appointment"
 	if len(decoratedUser.events.all().filter(title=eventTitle)) > 0:
