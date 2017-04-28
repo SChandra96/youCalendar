@@ -189,9 +189,11 @@ def deleteEvent(request,id):
 @login_required
 def editEvent(request, id):
 	context = {}
-
+	eventObj = get_object_or_404(Event, id=int(id))
+	if not eventObj.isAppointment: 
+		context['shareViaEmail'] = True
+		print context
 	if request.method == 'GET':
-		eventObj = get_object_or_404(Event, id=int(id))
 		context['form'] = EditEventForm({'title':eventObj.title, 
 			'datepicker': eventObj.startDate })
 		context['startTime'] = eventObj.startTime[:-3]

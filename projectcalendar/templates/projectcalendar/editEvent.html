@@ -61,6 +61,7 @@
                 <td>{{ form.datepicker.label_tag }}</td>
                 <td>{{ form.datepicker }}</td>
               </tr>
+              {% if shareViaEmail %}
               <tr>
                 <td> Invitee's email ID: </td>
                 <td id = "email-td0">{{ form.email }}</td>
@@ -69,6 +70,7 @@
                 <td id = "email-td2"> Read/Write: 
                 <input name="privacy-r&w" type="checkbox"> </input> <td>
               </tr>
+              {% endif %}
               <tr>
                 <td > Notifications: </td>
                 <td id ="td-noti"> {{form.notifTime}} </td>
