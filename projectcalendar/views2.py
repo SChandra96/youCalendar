@@ -190,6 +190,7 @@ def deleteEvent(request,id):
 def editEvent(request, id):
 	context = {}
 	eventObj = get_object_or_404(Event, id=int(id))
+	decUser = UserWithFields.objects.get(user=request.user)
 	if not eventObj.isAppointment: 
 		context['shareViaEmail'] = True
 		print context
@@ -265,7 +266,12 @@ def editEvent(request, id):
 	notificationPref = request.POST['notifPref']
 	
 	if (startDate != ''): event.startDate = startDate
-	if (title != ''): event.title = title
+	if (title != ''): 
+		if len(decUser.events.all().filter(title=title)) > 0:
+			context['error'] = "Please create an event with a unique name"
+			return render(request, 'projectcalendar/editEvent.html', context)
+		else:
+			event.title = title
 	if (startTime != ''): 
 		if(len(startTime) >17):
 			event.startTime = startTime
