@@ -172,6 +172,7 @@ def checkEventPrivacy(request, id):
 		redirectUrl = '/edit_event/'+ id
 		return redirect(redirectUrl)
 	else:
+		request.session['error'] = "Sorry you don't have the privilege to edit event"
 		return redirect('/')
 
 def deleteEvent(request,id):
@@ -408,7 +409,7 @@ def acceptRW(request, eventTitle, userEmail, token):
 	print "line 349"
 	print instance
 	instance.delete()
-	
+
 	decUser.events.add(event)
 	decUser.save()
 	event.admins.add(user)
