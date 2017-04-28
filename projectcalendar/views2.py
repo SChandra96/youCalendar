@@ -76,7 +76,7 @@ def getCalendarNames(user):
 		context['calNames'].append(calendar.name)
 	return context
 
-def validateEventDetails(startTime, endTime, isAppt, apptSlot, eventTitle, decoratedUser, calendarName):
+def validateEventDetails(startTime, endTime, isAppt, apptSlot, eventTitle, decoratedUser, calendarName, slotTime):
 	fmt = "%H:%M:%S"
 	start = datetime.strptime(startTime, fmt)
 	end = datetime.strptime(endTime, fmt)
@@ -84,6 +84,9 @@ def validateEventDetails(startTime, endTime, isAppt, apptSlot, eventTitle, decor
 		return "End time of event must be after start time. Please try again"
 	if isAppt ^ apptSlot:
 		return "To create an appointment, you must set type of event to appointment and enter a slot duration. Try again"
+	if not (isAppt ^ apptSlot):
+		if slotTime == '':
+			return "Please enter a slot duration between 15-60 minutes to create an appointment"
 	if len(decoratedUser.events.all().filter(title=eventTitle)) > 0:
 		return "Please create an event with a unique name"
 	if calendarName == '':
@@ -111,7 +114,7 @@ def addEvent(request):
 	endTime = request.POST['endTime'] + ":00"
 	isAppointment = "appointment" in request.POST and "appointmentSlot" in request.POST
 	error = validateEventDetails(startTime, endTime, "appointment" in request.POST,
-								"appointmentSlot" in request.POST, title, decUser, calendarName)
+								"appointmentSlot" in request.POST, title, decUser, calendarName, request.POST["slotTime"])
 	if error != '':
 		request.session['error'] = error
 		return redirect('/')
@@ -122,9 +125,6 @@ def addEvent(request):
 					  endTime=endTime, isAppointment=isAppointment, calendar=calendar)
 	new_event.save()
 	if isAppointment:
-		if not "slotTime" in request.POST:
-			request.session['error'] = "You must enter a slot duration to create an appointment"
-			return redirect('/')
 		new_event.apptSlot = int(request.POST["slotTime"])
 		token = ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(10))
 		new_event.token = token
@@ -266,7 +266,7 @@ def editEvent(request, id):
 	notificationPref = request.POST['notifPref']
 	
 	if (startDate != ''): event.startDate = startDate
-	if (title != ''): 
+	if (title != event.title): 
 		if len(decUser.events.all().filter(title=title)) > 0:
 			context['error'] = "Please create an event with a unique name"
 			return render(request, 'projectcalendar/editEvent.html', context)
