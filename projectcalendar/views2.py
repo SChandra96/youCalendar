@@ -75,7 +75,7 @@ def getCalendarNames(user):
 		context['calNames'].append(calendar.name)
 	return context
 
-def validateEventDetails(startTime, endTime, isAppt, apptSlot):
+def validateEventDetails(startTime, endTime, isAppt, apptSlot, eventTitle, decoratedUser):
 	fmt = "%H:%M:%S"
 	start = datetime.strptime(startTime, fmt)
 	end = datetime.strptime(endTime, fmt)
@@ -83,6 +83,8 @@ def validateEventDetails(startTime, endTime, isAppt, apptSlot):
 		return "End time of event must be after start time. Please try again"
 	if isAppt ^ apptSlot:
 		return "To create an appointment, you must set type of event to appointment and enter a slot duration. Try again"
+	if len(decoratedUser.events.all().filter(title=eventTitle)) > 0:
+		return "Please create an event with a unique name"
 	return ""
 
 @login_required
@@ -94,6 +96,7 @@ def addEvent(request):
 	form = CreateEventForm(request.POST)
 	if not form.is_valid():
 		return redirect('/')
+	title = form.cleaned_data['title']
 	startDate = form.cleaned_data['datepicker']
 	startTime = request.POST['startTime']+":00"
 	endTime = request.POST['endTime'] + ":00"
@@ -102,7 +105,7 @@ def addEvent(request):
 	decUser = UserWithFields.objects.get(user=request.user)
 	calendar = decUser.calendar.get(name=calendarName)
 	error = validateEventDetails(startTime, endTime, "appointment" in request.POST,
-								"appointmentSlot" in request.POST)
+								"appointmentSlot" in request.POST, title, decUser)
 	if error != '':
 		request.session['error'] = error
 		return redirect('/')
