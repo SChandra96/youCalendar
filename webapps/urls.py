@@ -27,9 +27,9 @@ urlpatterns = [
     url(r'^login$', auth_views.login, {'template_name':'projectcalendar/login.html'}, name='login'),
     # # Route to logout a user and send them back to the login page
     url(r'^logout$', auth_views.logout_then_login, name='logout'),
-    url(r'^acceptReadInvitation/(?P<eventTitle>[a-zA-Z0-9_@\+\-]+)/(?P<userEmail>[\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4})/(?P<token>[a-z0-9\-]+)$',
+    url(r'^acceptReadInvitation/(?P<eventTitle>[a-zA-Z0-9_@\+\-]+)/(?P<userEmail>[\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4})/(?P<token>[a-zA-Z0-9\-]+)$',
         views.acceptRead, name='readOnly'),
-    url(r'^acceptReadAndWriteInvitation/(?P<eventTitle>[a-zA-Z0-9_@\+\-]+)/(?P<userEmail>[\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4})/(?P<token>[a-z0-9\-]+)$',
+    url(r'^acceptReadAndWriteInvitation/(?P<eventTitle>[a-zA-Z0-9_@\+\-]+)/(?P<userEmail>[\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4})/(?P<token>[a-zA-Z0-9\-]+)$',
         views.acceptRW, name='readAndWrite'),
     url(r'^appointmentCalendar/(?P<token>[a-z0-9\-]+)$', views.seeAptCalendar, name='apptCalendar'),
 ]

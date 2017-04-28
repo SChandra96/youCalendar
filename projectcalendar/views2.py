@@ -11,6 +11,7 @@ from django.db import transaction
 import json
 from django.http import Http404
 from django.contrib.auth.tokens import default_token_generator
+from django.utils.crypto import get_random_string
 
 # Used to send mail from within Django
 from django.core.mail import send_mail
@@ -311,7 +312,17 @@ def editEvent(request, id):
 				context['error'] = "The user you are trying to share this event with already has read and write privileges"
 			
 			else:
-				token = default_token_generator.make_token(inviteUser)
+				# token = default_token_generator.make_token(inviteUser)
+				token = get_random_string(length=32)
+				print "line 309 : "+ token
+
+				if(EM_Token.objects.filter(em_user=inviteUser, em_event=event).count() == 0):
+					new_token_record = EM_Token(em_user=inviteUser, em_event=event,em_token=token)
+					new_token_record.save()
+				else:
+					old_token_record = EM_Token.objects.get(em_user=inviteUser, em_event=event)
+					token = old_token_record.em_token
+				
 				email_url = "http://%s%s" % (request.get_host(), reverse(urlArgName, args=(event.title, email, token)))
 				email_body = ("You've been invited to the event " + event.title +
 							 " Please click on the link below to be added to this event " + 
@@ -338,21 +349,27 @@ def editEvent(request, id):
 
 @transaction.atomic
 def acceptRead(request, eventTitle, userEmail, token):
-	if not request.user.is_authenticated:
-		user = get_object_or_404(User, email=userEmail)
-		decUser = UserWithFields.objects.get(user=user)
-		event = get_object_or_404(Event, title=eventTitle)
-		print  eventTitle, userEmail, token
-		# Send 404 error if token is invalid
-		if not default_token_generator.check_token(user, token):
-			raise Http404
-
-		decUser.events.add(event)
-		decUser.save()
-	 
-		return render(request, 'projectcalendar/acceptedInvitation.html', {})
+	
+	user = get_object_or_404(User, email=userEmail)
+	decUser = UserWithFields.objects.get(user=user)
+	event = get_object_or_404(Event, title=eventTitle)
+	print  eventTitle, userEmail, token
+	# Send 404 error if token is invalid
+	# if not default_token_generator.check_token(user, token):
+	# EM_Token.objects.filter(em_user=user, em_event=event,em_token=token).exists
+	if(not EM_Token.objects.filter(em_user=user, em_event=event,em_token=token).count() == 1):
+		raise Http404
 	else:
-		return redirect('/logout')
+		instance = EM_Token.objects.get(em_user=user, em_event=event,em_token=token)
+		print "line 349"
+		print instance
+		instance.delete()
+
+	decUser.events.add(event)
+	decUser.save()
+ 
+	return render(request, 'projectcalendar/acceptedInvitation.html', {})
+	
 
 @transaction.atomic
 def acceptRW(request, eventTitle, userEmail, token):
@@ -361,15 +378,15 @@ def acceptRW(request, eventTitle, userEmail, token):
 	event = get_object_or_404(Event, title=eventTitle)
 
 	# Send 404 error if token is invalid
-	if not default_token_generator.check_token(user, token):
+	# if not default_token_generator.check_token(user, token):
+	if(not EM_Token.objects.filter(em_user=user, em_event=event, em_token=token).count() == 1):
 		raise Http404
 
 	decUser.events.add(event)
 	decUser.save()
 	event.admins.add(user)
 	event.save()
-	if request.user.is_authenticated:
-		return redirect('/')
+
 	return render(request, 'projectcalendar/acceptedInvitation.html', {})
 
 def makeEventList(qs):
