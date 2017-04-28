@@ -65,5 +65,7 @@ a:hover {
 
 #p-error{
     margin-left: 250px;
-    font-size: 18px;
+    font-weight: bold;
+    font-size: large;
+
 }
