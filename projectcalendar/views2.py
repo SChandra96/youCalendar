@@ -191,6 +191,9 @@ def editEvent(request, id):
 	context = {}
 	eventObj = get_object_or_404(Event, id=int(id))
 	decUser = UserWithFields.objects.get(user=request.user)
+	if not request.user in eventObj.admins.all():
+		request.session['error'] = "Sorry you don't have the privilege to edit event"
+		return redirect('/')
 	if not eventObj.isAppointment: 
 		context['shareViaEmail'] = True
 		print context
@@ -366,18 +369,21 @@ def acceptRead(request, eventTitle, userEmail, token):
 	
 	user = get_object_or_404(User, email=userEmail)
 	decUser = UserWithFields.objects.get(user=user)
-	event = get_object_or_404(Event, title=eventTitle)
-	print  eventTitle, userEmail, token
+	#event = get_object_or_404(Event, title=eventTitle)
+	foundEvtUser = False
 	# Send 404 error if token is invalid
 	# if not default_token_generator.check_token(user, token):
 	# EM_Token.objects.filter(em_user=user, em_event=event,em_token=token).exists
-	if(not EM_Token.objects.filter(em_user=user, em_event=event,em_token=token).count() == 1):
+	for event in Event.objects.filter(title=eventTitle):
+		if (EM_Token.objects.filter(em_user=user, em_event=event, em_token=token).count() == 1):
+			foundEvtUser = True
+			break
+	if not foundEvtUser:
 		raise Http404
-	else:
-		instance = EM_Token.objects.get(em_user=user, em_event=event,em_token=token)
-		print "line 349"
-		print instance
-		instance.delete()
+	instance = EM_Token.objects.get(em_user=user, em_event=event,em_token=token)
+	print "line 349"
+	print instance
+	instance.delete()
 
 	decUser.events.add(event)
 	decUser.save()
@@ -389,13 +395,20 @@ def acceptRead(request, eventTitle, userEmail, token):
 def acceptRW(request, eventTitle, userEmail, token):
 	user = get_object_or_404(User, email=userEmail)
 	decUser = UserWithFields.objects.get(user=user)
-	event = get_object_or_404(Event, title=eventTitle)
+	#event = get_object_or_404(Event, title=eventTitle)
 
 	# Send 404 error if token is invalid
 	# if not default_token_generator.check_token(user, token):
-	if(not EM_Token.objects.filter(em_user=user, em_event=event, em_token=token).count() == 1):
-		raise Http404
-
+	foundEvtUser = False
+	for event in Event.objects.filter(title=eventTitle):
+		if (EM_Token.objects.filter(em_user=user, em_event=event, em_token=token).count() == 1):
+			foundEvtUser = True
+	if not foundEvtUser: raise Http404
+	instance = EM_Token.objects.get(em_user=user, em_event=event,em_token=token)
+	print "line 349"
+	print instance
+	instance.delete()
+	
 	decUser.events.add(event)
 	decUser.save()
 	event.admins.add(user)
