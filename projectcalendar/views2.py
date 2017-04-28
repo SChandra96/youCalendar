@@ -75,7 +75,7 @@ def getCalendarNames(user):
 		context['calNames'].append(calendar.name)
 	return context
 
-def validateEventDetails(startTime, endTime, isAppt, apptSlot, eventTitle, decoratedUser):
+def validateEventDetails(startTime, endTime, isAppt, apptSlot, eventTitle, decoratedUser, calendarName):
 	fmt = "%H:%M:%S"
 	start = datetime.strptime(startTime, fmt)
 	end = datetime.strptime(endTime, fmt)
@@ -85,6 +85,8 @@ def validateEventDetails(startTime, endTime, isAppt, apptSlot, eventTitle, decor
 		return "To create an appointment, you must set type of event to appointment and enter a slot duration. Try again"
 	if len(decoratedUser.events.all().filter(title=eventTitle)) > 0:
 		return "Please create an event with a unique name"
+	if calendarName == '':
+		return "You must create a calendar before adding an event to it"
 	return ""
 
 @login_required
@@ -96,16 +98,19 @@ def addEvent(request):
 	form = CreateEventForm(request.POST)
 	if not form.is_valid():
 		return redirect('/')
+		
+	decUser = UserWithFields.objects.get(user=request.user)
+	if 'calName' in request.POST:	
+		calendarName = request.POST['calName']
+		calendar = decUser.calendar.get(name=calendarName)
+	else: calendarName = ''
 	title = form.cleaned_data['title']
 	startDate = form.cleaned_data['datepicker']
 	startTime = request.POST['startTime']+":00"
 	endTime = request.POST['endTime'] + ":00"
 	isAppointment = "appointment" in request.POST and "appointmentSlot" in request.POST
-	calendarName = request.POST['calName']
-	decUser = UserWithFields.objects.get(user=request.user)
-	calendar = decUser.calendar.get(name=calendarName)
 	error = validateEventDetails(startTime, endTime, "appointment" in request.POST,
-								"appointmentSlot" in request.POST, title, decUser)
+								"appointmentSlot" in request.POST, title, decUser, calendarName)
 	if error != '':
 		request.session['error'] = error
 		return redirect('/')
